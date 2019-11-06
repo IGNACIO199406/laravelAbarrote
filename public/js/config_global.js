@@ -1,8 +1,8 @@
  /*
-                                                                                               ------------------------------------------------
-                                                                                               Insert Update Delete
-                                                                                               ------------------------------------------------
-                                                                                               */
+                                                                                                                                                                                                                                                              ------------------------------------------------
+                                                                                                                                                                                                                                                              Insert Update Delete
+                                                                                                                                                                                                                                                              ------------------------------------------------
+                                                                                                                                                                                                                                                              */
 
  //declaracion de variables
  var letras, numeros, correo, Contador, array_inputs, i, x, Search_required, Input_validar, Input_validar_texto, Input_validar_numeros, Input_validar_correo, ID_Form;
@@ -26,7 +26,7 @@
          Contador = 0;
          array_inputs = [];
          Select_ID_Form = $(this).attr('id');
-         Select_Actio_Form = $(this).attr('action');
+         Select_Action_Form = $(this).attr('action');
 
          //funcion de validacion
          function Validacion() {
@@ -145,7 +145,7 @@
              var formssss = new FormData(this);
              $.ajax({
                  type: 'POST',
-                 url: Select_Actio_Form,
+                 url: Select_Action_Form,
                  data: new FormData(this),
                  contentType: false,
                  cache: false,
@@ -154,7 +154,7 @@
                      registros = JSON.parse(Datos);
                      switch (registros.succes) {
                          case 'ok':
-                             var buscarCadena = Select_Actio_Form.search("usuario/login");
+                             var buscarCadena = Select_Action_Form.search("usuario/login");
                              if (buscarCadena >= 0) {
                                  window.location.href = "/usuario/lista";
                              } else {
@@ -163,7 +163,7 @@
                                  dataTableId.ajax.reload(null, false);
                                  $("#Modal-" + Select_ID_Form).modal("hide");
                              }
-                             console.log(buscarCadena);
+                             console.log(registros);
                              break;
                          case 'error':
                              break;
@@ -210,10 +210,10 @@
  var accionesDatatable = {
      "render": function(data, type, row) {
          if (row.status == "1") {
-             action = '<i onclick="funcionDelete(' + row.id + ')" class="iconoDelete fa fa-trash fa-2x w3-text-red" style="cursor: pointer;" > </i> ' +
-                 '<i class="fa fa-edit fa-2x w3-text-orange" style="cursor: pointer;" > </i>';
+             action = '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-trash fa-2x w3-text-red" style="cursor: pointer;" > </i> ' +
+                 '<i onclick="funcionSelectId(' + row.id + ",'registroUpdate'" + ')" class="fa fa-edit fa-2x w3-text-orange" style="cursor: pointer;" > </i>';
          } else {
-             action = '<i onclick="funcionDelete(' + row.id + ')" class="iconoDelete fa fa-check-circle fa-2x w3-text-green" style="cursor: pointer;" > </i> ';
+             action = '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-check-circle fa-2x w3-text-green" style="cursor: pointer;" > </i> ';
          }
          return action;
      }
@@ -249,9 +249,21 @@
      $("#Modal-eliminaRegistro").modal("show");
  }
 
+ // llamada del form para eliminar o activar registro
+ function showModalUpdate(registroArray, tabla) {
+     $("#InUp_" + tabla)[0].reset();
+     $("#InUp_" + tabla).attr("action", tabla.toLowerCase() + "/actualiza");
+     $("#Modal-Titulo").text("Actualiza Reistro");
+     ID_Form = document.getElementsByTagName('form')["InUp_" + tabla];
+     ID_Form["ID"].value = registroArray.id;
+     ID_Form["Nombre"].value = registroArray.nombre;
+
+     $("#Modal-InUp_" + tabla).modal("show");
+ }
+
 
  // llamada del registro a la bd
- function funcionDelete(id) {
+ function funcionSelectId(id, accion) {
      $.ajax({
          type: 'GET',
          url: idTablaLista.toLowerCase() + "/detalle/" + id,
@@ -260,13 +272,20 @@
          processData: false,
          success: function(Datos) {
              registros = JSON.parse(Datos);
-             showModalDelete();
+             if (accion == "registroDelete") {
+                 showModalDelete();
+             } else if (accion == "registroUpdate") {
+                 showModalUpdate(registros, idTablaLista);
+             }
+
          }
      });
  }
 
  // llamada al Modal de registro
  $('#botonRegistro').click(function() {
-     //$("#Modal-InUp_" + idTablaLista)[0].reset();
+     $("#InUp_" + idTablaLista)[0].reset();
+     $("#InUp_" + idTablaLista).attr("action", idTablaLista.toLowerCase() + "/crea");
+     $("#Modal-Titulo").text("Crear Reistro");
      $(this).attr("data-target", "#Modal-InUp_" + idTablaLista);
  });

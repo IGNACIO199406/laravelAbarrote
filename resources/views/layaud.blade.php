@@ -173,9 +173,9 @@
               <a class="small-box-footer " data-toggle="modal" data-target="" id="botonRegistro">Registrar <i class="fa fa-arrow-circle-right "></i></a>
             </div>
           </div>
-
+<!-- 
           <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
+            small box 
             <div class="small-box bg-purple">
               <div class="inner">
                 <h3>150</h3>
@@ -186,9 +186,9 @@
               </div>
               <a class="small-box-footer " data-toggle="modal" data-target="">Registrar <i class="fa fa-arrow-circle-right "></i></a>
             </div>
-          </div>
+          </div>-->
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-6">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-green">
               <div class="inner">
@@ -203,7 +203,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-6">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-yellow">
               <div class="inner">
@@ -217,7 +217,7 @@
             </div>
           </div>
           <!-- ./col -->
-          <div class="col-lg-2 col-xs-6">
+          <div class="col-lg-3 col-xs-6">
             <!-- small box -->
             <div class="small-box bg-red">
               <div class="inner">

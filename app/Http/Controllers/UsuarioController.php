@@ -1,17 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-use App\Usuarios; 
+use App\Usuarios as modelado;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class UsuarioController extends Controller
 {
-    /**
-     * Display a listing of thssse resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
       return view('usuario/usuario');
@@ -38,7 +32,7 @@ class UsuarioController extends Controller
             $result = ["succes"=>'error',"msg"=>$e->getMessage()];
             }
         return json_encode($result) ;
-    }
+    }   
 
     public function home()
     {
@@ -50,88 +44,106 @@ class UsuarioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {    
+    {
         try {
-            $result = array();   
-            $correo = $request->input('Correo');
             $nombre = $request->input('Nombre');
-            $consulta = Usuarios::where("email","=",$correo)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $resul=$consulta["contador"];
-            if($resul==0){
-                $usuario = new Usuarios();
-                $usuario->id_status=1;
-                $usuario->nombre=$nombre;
-                $usuario->email=$correo;
-                $usuario->password='12345678';
-                $usuario->status='1';
-                $usuario->created_at='2019-09-10 00:00:00';
-                
-                $usuario->save();
-                $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
-            }else{
-                $result = ["succes"=>'error',"msg"=>$this->registroError];
+            $file = $request->file('archivo');
+            $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
+            $raiz = 'img';
+            $carpeta = "usuario";
+            $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
+            file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
+            if (file_exists($rutaArhcivo) == true && $archivo != "logo.png") {
+                $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
+            } else {
+                $result = array();
+                $consulta = modelado::where("nombre", "=", $nombre)
+                    ->selectRaw('count(*) as contador')
+                    ->first();
+                $resul = $consulta["contador"];
+                if ($resul == 0) {
+                    $query = new modelado();
+                    $query->nombre = $nombre;
+                    $query->email = "ignacio_juego@hotmail.com";
+                    $query->password = "12345";
+                    $query->archivo = $archivo;
+                    $query->status = '1';
+                    $query->created_at = $query->freshTimestamp();
+                    $query->save();
+                    $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+                    strcmp($archivo, "logo.png") ? $file->move($raiz . "/" . $carpeta, $archivo) : "";
+                } else {
+                    $result = ["succes" => 'error', "msg" => $this->registroError];
+                }
             }
-
         } catch (\Exception $e) {
-        $result = ["succes"=>'error',"msg"=>$e->getMessage()];
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
         }
-        return json_encode($result);  
+        return json_encode($result);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function list(Request $request)
     {
-        return Usuarios::all();
+        try {
+            $result = modelado::all();
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id=5)
+    public function update(Request $request)
     {
         try {
-            $usuario=Usuarios::where('id','=',$id)->first();
-            if($usuario==true){
-               $usuario->nombre='pedro';
-               $usuario->password='12345678';
-               $usuario->save();
+            $nombre = $request->input('Nombre');
+            $id = $request->input('ID');
+            $consulta = modelado::where("nombre","=",$nombre)
+                                ->where("id","!=",$id)
+                                ->selectRaw('count(*) as contador')
+                                ->first();
+            $result=$consulta["contador"];
+            if ($result == 0) {
+                $query = modelado::where("id","=",$id)
+                                ->first();
+                $query->nombre = $nombre;
+                $query->created_at = $query->freshTimestamp();
+                $query->save();
+                $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+            } else {
+                $result = ["succes" => 'error', "msg" => $this->registroError];
             }
-            $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
         } catch (\Exception $e) {
-                $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-            return json_encode($result);  
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id=5)
+    public function delete(Request $request)
+    {
+        $ID = $request->input('eliminaID');
+        $Status = $request->input('eliminaStatus');
+        try {
+            $query = modelado::where('id', '=', $ID)->first();
+            if ($query == true) {
+                $query->status = $Status;
+                $query->updated_at = $query->freshTimestamp();
+                $query->save();
+            }
+            $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
+    }
+
+    public function detalle(Request $request, $ID)
     {
         try {
-            $usuario=Usuarios::where('id','=',$id)->first();
-            if($usuario==true){
-                $usuario->status='0';
-                $usuario->save();
-            }
-            $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
+            $query = modelado::where('id', '=', $ID)->first();
+            $result = $query;
         } catch (\Exception $e) {
-                 $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-            return json_encode($result);   
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 }

@@ -1,14 +1,11 @@
 <?php
-
 namespace App\Http\Controllers;
-
 use App\MarcasModel as modelado;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 class MarcaController extends Controller
 {
-
     public function index()
     {
         return view('marca/marca');
@@ -61,16 +58,26 @@ class MarcaController extends Controller
         return json_encode($result);
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
         try {
-            $usuario = modelado::where('id', '=', $id)->first();
-            if ($usuario == true) {
-                $usuario->nombre = 'pedro';
-                $usuario->password = '12345678';
-                $usuario->save();
+            $nombre = $request->input('Nombre');
+            $id = $request->input('ID');
+            $consulta = modelado::where("nombre","=",$nombre)
+                                ->where("id","!=",$id)
+                                ->selectRaw('count(*) as contador')
+                                ->first();
+            $result=$consulta["contador"];
+            if ($result == 0) {
+                $query = modelado::where("id","=",$id)
+                                ->first();
+                $query->nombre = $nombre;
+                $query->created_at = $query->freshTimestamp();
+                $query->save();
+                $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+            } else {
+                $result = ["succes" => 'error', "msg" => $this->registroError];
             }
-            $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
         } catch (\Exception $e) {
             $result = ["succes" => 'error', "msg" => $this->sistemaError];
         }
@@ -105,44 +112,4 @@ class MarcaController extends Controller
         }
         return json_encode($result);
     }
-
-    public function csv(Request $request)
-    {
-        if (file_exists("img/Marcas.csv")) {
-            Excel::filter('chunk')->load('img/Marcas.csv')->chunk(250, function ($results) {
-                foreach ($results as $row) {
-                    // resultado
-                }
-                return "si hay";
-            });
-        } else {
-            return "no hay";
-        }
-    }
 }
-
-//extra info
-// $file = $request->file('image');
-   
-// //Display File Name
-// echo 'File Name: '.$file->getClientOriginalName();
-// echo '<br>';
-
-// //Display File Extension
-// echo 'File Extension: '.$file->getClientOriginalExtension();
-// echo '<br>';
-
-// //Display File Real Path
-// echo 'File Real Path: '.$file->getRealPath();
-// echo '<br>';
-
-// //Display File Size
-// echo 'File Size: '.$file->getSize();
-// echo '<br>';
-
-// //Display File Mime Type
-// echo 'File Mime Type: '.$file->getMimeType();
-
-// //Move Uploaded File
-// $destinationPath = 'uploads';
-// $file->move($destinationPath,$file->getClientOriginalName());
