@@ -2,11 +2,6 @@
 @section('titulo','Marca')
 @section('conten')
 <div class="">
-  <div class="col-sm-12">
-    Mostrar / Ocultar las distintas columnas.
-  </div>
-</div>
-<div class="">
   <div class="col-lg-12 col-xs-12 w3-white">
     <table id="listaMarca" class="display" style="width:100%">
       <thead>

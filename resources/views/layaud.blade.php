@@ -170,7 +170,7 @@
               <div class="icon">
                 <i class="fa fa-database w3-text-white"></i>
               </div>
-              <a class="small-box-footer " data-toggle="modal" data-target="" id="botonRegistro">Registrar <i class="fa fa-arrow-circle-right "></i></a>
+              <a class="small-box-footer w3-cursor-pointer" data-toggle="modal" data-target="" id="botonRegistro">Registrar <i class="fa fa-arrow-circle-right "></i></a>
             </div>
           </div>
 <!-- 
