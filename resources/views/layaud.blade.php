@@ -119,7 +119,8 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">DESARROLLADOR</li>
-          <li class="active treeview">
+          <!-- class="active treeview"-->
+          <li class="treeview">
             <a href="">
               <i class="fa fa-dashboard"></i> <span>Administracion</span>
               <span class="pull-right-container">
@@ -127,7 +128,8 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <li class="active"><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> Usuario</a></li>
+              <!--class="active"-->
+              <li><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> Usuario</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Rol</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Almacen</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Proveedor</a></li>

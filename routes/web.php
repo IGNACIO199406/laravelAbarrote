@@ -7,7 +7,7 @@
 php artisan make:controller Marca
 */
 
-$arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", "categoria" => "categoria", "producto" => "producto"];
+$arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", "categoria" => "categoria", "producto" => "producto", "catalogo" => "catalogo"];
 foreach ($arrayList as $rutaSelect) {
     Route::get("/" . $rutaSelect . "/", ucfirst($rutaSelect) . "Controller@index")->name($rutaSelect . "Vista");
     Route::get("/" . $rutaSelect . "/lista", ucfirst($rutaSelect) . "Controller@list")->name($rutaSelect . "Lista");

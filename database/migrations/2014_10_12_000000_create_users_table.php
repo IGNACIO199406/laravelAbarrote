@@ -23,7 +23,7 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('status', function (Blueprint $table) {
+        Schema::create('estatus', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',45);
             $table->string('status',2);
@@ -33,6 +33,22 @@ class CreateUsersTable extends Migration
         Schema::create('tipo_usuario', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',45);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('catalogo', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('url',45);
+            $table->string('parent',10);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+        Schema::create('marca', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
             $table->string('status',2);
             $table->timestamps();
         });
@@ -46,7 +62,9 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::drop('usuario');
-        Schema::drop('status');
+        Schema::drop('estatus');
         Schema::drop('tipo_usuario');
+        Schema::drop('catalogo');
+        Schema::drop('marca');
     }
 }
