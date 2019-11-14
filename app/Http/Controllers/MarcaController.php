@@ -1,6 +1,7 @@
 <?php
 namespace App\Http\Controllers;
 use App\MarcasModel as modelado;
+use App\CatalogoModel as modeladoCatalogo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -8,7 +9,8 @@ class MarcaController extends Controller
 {
     public function index()
     {
-        return view('marca/marca');
+        $datos = modeladoCatalogo::all();
+        return view('marca/marca')->with('datos', $datos);
     }
 
     public function create(Request $request)

@@ -120,6 +120,30 @@
         <ul class="sidebar-menu" data-widget="tree">
           <li class="header">DESARROLLADOR</li>
           <!-- class="active treeview"-->
+
+          @foreach ($datos as $dato)
+          @if ($dato->status==1)
+        <li class="treeview">
+        @if ($dato->parent==0)
+            <a >
+              <i class="fa fa-dashboard"></i> <span>{{ $dato->nombre}}</span>
+              <span class="pull-right-container">
+                <i class="fa fa-angle-left pull-right"></i>
+              </span>
+            </a>
+            @endif
+            
+            <ul class="treeview-menu">
+            @foreach ($datos as $sub_dato)
+            @if ($sub_dato->parent==$dato->id)
+            <li><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> {{$sub_dato->nombre}}</a></li>
+            @endif
+            @endforeach
+          </ul>
+        
+          </li>
+          @endif
+        @endforeach
           <li class="treeview">
             <a href="">
               <i class="fa fa-dashboard"></i> <span>Administracion</span>

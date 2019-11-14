@@ -8,7 +8,8 @@ class CatalogoController extends Controller
 {
     public function index()
     {
-        return view('catalogo/catalogo');
+        $datos = modelado::all();
+        return view('catalogo/catalogo')->with('datos', $datos);
     }
 
     public function create(Request $request)
