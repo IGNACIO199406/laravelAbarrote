@@ -54,6 +54,7 @@ class CatalogoController extends Controller
     {
         try {
             $nombre = $request->input('Nombre');
+            $parent = $request->input('parent');
             $id = $request->input('ID');
             $consulta = modelado::where("nombre","=",$nombre)
                                 ->where("id","!=",$id)
@@ -64,6 +65,7 @@ class CatalogoController extends Controller
                 $query = modelado::where("id","=",$id)
                                 ->first();
                 $query->nombre = $nombre;
+                $query->parent = $parent;
                 $query->created_at = $query->freshTimestamp();
                 $query->save();
                 $result = ["succes" => 'ok', "msg" => $this->registroExitoso];

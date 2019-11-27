@@ -257,7 +257,9 @@
      ID_Form = document.getElementsByTagName('form')["InUp_" + tabla];
      ID_Form["ID"].value = registroArray.id;
      ID_Form["Nombre"].value = registroArray.nombre;
-
+        if(tabla.toLowerCase()=="catalogo"){
+            $("#parent option[value="+ registroArray.parent +"]").attr("selected",true);
+        }
      $("#Modal-InUp_" + tabla).modal("show");
  }
 
