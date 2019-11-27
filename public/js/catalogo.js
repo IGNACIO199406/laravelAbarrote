@@ -19,7 +19,7 @@ $.ajax({
     success: function(Datos) {
         registros = JSON.parse(Datos);
         for (const registro in registros) {
-            $("#parent").append("<option value='"+registros[registro].id+"'>"+registros[registro].nombre+"</option>");
+            $("#parent").append("<option value='"+registros[registro].id+"' serial='"+registros[registro].id+"'>"+registros[registro].nombre+"</option>");
         }
     }
 });

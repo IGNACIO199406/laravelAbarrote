@@ -258,7 +258,8 @@
      ID_Form["ID"].value = registroArray.id;
      ID_Form["Nombre"].value = registroArray.nombre;
         if(tabla.toLowerCase()=="catalogo"){
-            $("#parent option[value="+ registroArray.parent +"]").attr("selected",true);
+            $('#parent option[value='+ registroArray.parent +']').prop("selected", true);
+            var serial_attr = $("#parent option:selected").attr("serial");
         }
      $("#Modal-InUp_" + tabla).modal("show");
  }
