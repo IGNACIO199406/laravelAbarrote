@@ -98,6 +98,7 @@ class CatalogoController extends Controller
 
     public function detalle(Request $request, $ID)
     {
+       
         try {
             $query = modelado::where('id', '=', $ID)->first();
             $result = $query;
