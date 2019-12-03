@@ -135,8 +135,8 @@
             
             <ul class="treeview-menu">
             @foreach ($datos as $sub_dato)
-            @if ($sub_dato->parent==$dato->id)
-            <li><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> {{$sub_dato->nombre}}</a></li>
+            @if ($sub_dato->parent==$dato->id) 
+            <li><a href="{{ route(strtolower($sub_dato->nombre).'Vista') }}"><i class="fa fa-circle-o"></i> {{$sub_dato->nombre}}</a></li>
             @endif
             @endforeach
           </ul>
@@ -144,7 +144,7 @@
           </li>
           @endif
         @endforeach
-          <li class="treeview">
+          <!-- <li class="treeview">
             <a href="">
               <i class="fa fa-dashboard"></i> <span>Administracion</span>
               <span class="pull-right-container">
@@ -152,7 +152,7 @@
               </span>
             </a>
             <ul class="treeview-menu">
-              <!--class="active"-->
+              //class="active"
               <li><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> Usuario</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Rol</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Almacen</a></li>
@@ -171,7 +171,7 @@
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Empleado</a></li>
               <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Bitacora</a></li>
             </ul>
-          </li>
+          </li> -->
         </ul>
       </section>
       <!-- /.sidebar -->

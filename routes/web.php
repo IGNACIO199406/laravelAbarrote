@@ -7,7 +7,11 @@
 php artisan make:controller Marca
 */
 
-$arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", "categoria" => "categoria", "producto" => "producto", "catalogo" => "catalogo"];
+$arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", 
+              "categoria" => "categoria", "producto" => "producto", "catalogo" => "catalogo",
+              "rol" => "rol", "cliente" => "cliente", "permiso" => "permiso"];
+
+              
 foreach ($arrayList as $rutaSelect) {
     Route::get("/" . $rutaSelect . "/", ucfirst($rutaSelect) . "Controller@index")->name($rutaSelect . "Vista");
     Route::get("/" . $rutaSelect . "/lista", ucfirst($rutaSelect) . "Controller@list")->name($rutaSelect . "Lista");
@@ -17,10 +21,6 @@ foreach ($arrayList as $rutaSelect) {
     Route::get("/" . $rutaSelect . "/detalle/{id}", ucfirst($rutaSelect) . "Controller@detalle")->name($rutaSelect . "Detalle");
 }
 
-Route::get('/marca/csv', function(){
-    $filepath = resource_path().'/img/Marcas.csv';
-    dd(Excel::load($filepath, function($reader){})->get());
-  })->name("marcaCsv");
 /*
 |--------------------------------------------------------------------------
 | Web rutas de los controladores unicas

@@ -1,5 +1,5 @@
 @extends('layaud')
-@section('titulo','Marca')
+@section('titulo','Proveedor')
 @section('conten')
 <div class="">
   <div class="col-lg-12 col-xs-12 w3-white">
