@@ -10,11 +10,13 @@ class DatabaseSeeder extends Seeder
      * php artisan db:seed             --insertar registros
      * php artisan migrate:reset       --todas las migraciones
      * php artisan migrate:rollback    --ultima migracion
+     * composer dump-autoload
      * @return void
      */
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
-        $this->call(CatalogoTableSeeder::class);
+        //php artisan make:seeder Catalogo
+        $this->call(Catalogo::class);
     }
 }

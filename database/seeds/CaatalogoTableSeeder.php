@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CatalogoTableSeeder extends Seeder
+class CaatalogoTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
