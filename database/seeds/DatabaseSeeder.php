@@ -17,6 +17,10 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         //php artisan make:seeder Catalogo
+        //php artisan make:seeder Rol
+        //php artisan make:seeder Accion
         $this->call(Catalogo::class);
+        $this->call(Accion::class);
+        $this->call(Rol::class);
     }
 }

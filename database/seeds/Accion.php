@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class CaatalogoTableSeeder extends Seeder
+class Accion extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,51 +11,59 @@ class CaatalogoTableSeeder extends Seeder
      */
     public function run()
     {
-        return \DB::table('catalogo')->insert([
+        return \DB::table('accion')->insert([
             [
-                "nombre" => "Desarrollador",
-                "url" => "",
-                "parent" => "0",
+                "id" => 1,
+                "nombre" => "Vista",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
             ],
             [
-                "nombre" => "Usuario",
-                "url" => "",
-                "parent" => "1",
+                "id" => 2,
+                "nombre" => "Inserta",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
             ],
             [
-                "nombre" => "Marca",
-                "url" => "",
-                "parent" => "1",
+                "id" => 3,
+                "nombre" => "Actualiza",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
             ],
             [
-                "nombre" => "Proveedor",
-                "url" => "",
-                "parent" => "1",
+                "id" => 4,
+                "nombre" => "Elimina",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
             ],
             [
-                "nombre" => "Catalogo",
-                "url" => "",
-                "parent" => "1",
+                "id" => 5,
+                "nombre" => "Detalle",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
             ],
             [
-                "nombre" => "Rol",
-                "url" => "",
-                "parent" => "1",
+                "id" => 6,
+                "nombre" => "Activa",
+                "archivo" => "logo.png",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 7,
+                "nombre" => "Reporte",
+                "archivo" => "logo.png",
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')

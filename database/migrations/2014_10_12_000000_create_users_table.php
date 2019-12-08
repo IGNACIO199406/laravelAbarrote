@@ -45,6 +45,7 @@ class CreateUsersTable extends Migration
             $table->string('status',2);
             $table->timestamps();
         });
+
         Schema::create('marca', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',45);
@@ -52,6 +53,32 @@ class CreateUsersTable extends Migration
             $table->string('status',2);
             $table->timestamps();
         });
+
+        Schema::create('rol', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('accion', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('permiso', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('ID_Rol');
+            $table->integer('ID_Accion');
+            $table->integer('ID_Catalogo');
+            $table->string('status',2);
+            $table->timestamps();
+        });
+        
     }
 
     /**
@@ -66,5 +93,8 @@ class CreateUsersTable extends Migration
         Schema::drop('tipo_usuario');
         Schema::drop('catalogo');
         Schema::drop('marca');
+        Schema::drop('rol');
+        Schema::drop('accion');
+        Schema::drop('permiso');
     }
 }

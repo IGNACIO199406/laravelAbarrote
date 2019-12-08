@@ -1,50 +1,18 @@
 <?php
 namespace App\Http\Controllers;
-use App\Usuarios as modelado;
+use App\RolesModel as modelado;
 use App\CatalogoModel as modeladoCatalogo;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UsuarioController extends Controller
+class RolController extends Controller
 {
     public function index()
     {
         $datos = modeladoCatalogo::all();
-        return view('usuario/usuario')->with('datos', $datos);    
+        return view('rol/rol')->with('datos', $datos);
     }
-    
-    public function login(Request $request)
-    {
-        try {
-            $result = array();   
-            $email = $request->input('email');
-            $password = $request->input('password');
-            $consulta = Usuarios::where("email","=",$email)
-                                ->where("password","=",$password)
-                                ->where("status","=",1)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $resul=$consulta["contador"];
-            if($resul==1){
-              $result = ["succes"=>'ok',"msg"=>$this->loginExitoso];
-            }else{
-              $result = ["succes"=>'error',"msg"=>$this->loginError];
-            }
-        } catch (\Exception $e) {
-            $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-        return json_encode($result) ;
-    }   
 
-    public function home()
-    {
-        return view('usuario/login');
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create(Request $request)
     {
         try {
@@ -52,7 +20,7 @@ class UsuarioController extends Controller
             $file = $request->file('archivo');
             $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
             $raiz = 'img';
-            $carpeta = "usuario";
+            $carpeta = "rol";
             $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
             file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
             if (file_exists($rutaArhcivo) == true && $archivo != "logo.png") {
@@ -66,8 +34,6 @@ class UsuarioController extends Controller
                 if ($resul == 0) {
                     $query = new modelado();
                     $query->nombre = $nombre;
-                    $query->email = "ignacio_juego@hotmail.com";
-                    $query->password = "12345";
                     $query->archivo = $archivo;
                     $query->status = '1';
                     $query->created_at = $query->freshTimestamp();
@@ -140,6 +106,7 @@ class UsuarioController extends Controller
 
     public function detalle(Request $request, $ID)
     {
+        
         try {
             $query = modelado::where('id', '=', $ID)->first();
             $result = $query;

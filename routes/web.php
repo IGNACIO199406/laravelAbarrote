@@ -9,7 +9,7 @@ php artisan make:controller Marca
 
 $arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", 
               "categoria" => "categoria", "producto" => "producto", "catalogo" => "catalogo",
-              "rol" => "rol", "cliente" => "cliente", "permiso" => "permiso"];
+              "rol" => "rol", "cliente" => "cliente", "permiso" => "permiso", "accion" => "accion"];
 
               
 foreach ($arrayList as $rutaSelect) {
