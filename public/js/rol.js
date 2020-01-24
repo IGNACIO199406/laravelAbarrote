@@ -10,3 +10,5 @@ for (index = 0; index < adiocionalesDatatable.length; index++) {
     contadorSplice = contadorSplice + 1;
 }
 //php artisan make: seeder CatalogoTableSeeder
+
+columnasDatatable.push(accionesDatatable);

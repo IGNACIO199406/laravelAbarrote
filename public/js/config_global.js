@@ -1,8 +1,8 @@
  /*
-                                                                                                                                                                                                                                                              ------------------------------------------------
-                                                                                                                                                                                                                                                              Insert Update Delete
-                                                                                                                                                                                                                                                              ------------------------------------------------
-                                                                                                                                                                                                                                                              */
+                                                                                                                                                                                                                                                                                            ------------------------------------------------
+                                                                                                                                                                                                                                                                                            Insert Update Delete
+                                                                                                                                                                                                                                                                                            ------------------------------------------------
+                                                                                                                                                                                                                                                                                            */
 
  //declaracion de variables
  var letras, numeros, correo, Contador, array_inputs, i, x, Search_required, Input_validar, Input_validar_texto, Input_validar_numeros, Input_validar_correo, ID_Form;
@@ -156,14 +156,14 @@
                          case 'ok':
                              var buscarCadena = Select_Action_Form.search("usuario/login");
                              if (buscarCadena >= 0) {
-                                 window.location.href = "/usuario/lista";
+                                 window.location.href = "/usuario";
                              } else {
                                  $("#" + Select_ID_Form)[0].reset();
                                  dataTableId.clear().draw();
                                  dataTableId.ajax.reload(null, false);
                                  $("#Modal-" + Select_ID_Form).modal("hide");
                              }
-                             console.log(registros);
+                             //console.log(registros);
                              break;
                          case 'error':
                              break;
@@ -228,7 +228,7 @@
      statusDatatable,
      createdAtDatatable,
      updatedAtDatatable,
-     accionesDatatable
+
  ];
 
  // llamada del form para eliminar o activar registro
@@ -257,10 +257,15 @@
      ID_Form = document.getElementsByTagName('form')["InUp_" + tabla];
      ID_Form["ID"].value = registroArray.id;
      ID_Form["Nombre"].value = registroArray.nombre;
-        if(tabla.toLowerCase()=="catalogo"){
-            $('#parent option[value='+ registroArray.parent +']').prop("selected", true);
-            var serial_attr = $("#parent option:selected").attr("serial");
-        }
+     if (tabla.toLowerCase() == "catalogo") {
+         $('#parent option[value=' + registroArray.parent + ']').prop("selected", true);
+         var serial_attr = $("#parent option:selected").attr("serial");
+     } else if (tabla.toLowerCase() == "usuario") {
+         ID_Form["email"].value = registroArray.email;
+         ID_Form["password"].value = registroArray.password;
+         $('#ID_Rol option[value=' + registroArray.ID_Rol + ']').prop("selected", true);
+         var serial_attr = $("#parent option:selected").attr("serial");
+     }
      $("#Modal-InUp_" + tabla).modal("show");
  }
 

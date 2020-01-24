@@ -38,6 +38,18 @@
                     {{ csrf_field() }}
                     <div class="row">
                       <div class="col-md-12 col-sm-12 ">
+                      <div class="col-md-6 col-sm-6 ">
+                          <div class="form-group ">
+                            <label>Roles:</label>
+                            <select class="w3-input w3-border-blue " name="ID_Rol" name="ID_Rol">
+                         @foreach ($roles as $rol)
+                              @if ($rol->status==1)
+                              <option value="{{$rol->id}}">{{$rol->nombre}}</option>
+                              @endif
+                            @endforeach
+                            </select>
+                            </div>
+                        </div>
                         <div class="col-md-6 col-sm-6 ">
                           <div class="form-group ">
                             <label>Nombre:</label>
@@ -45,6 +57,18 @@
                           </div>
                         </div>
                         <div class="col-md-6 col-sm-6 ">
+                          <div class="form-group ">
+                            <label>Correo:</label>
+                            <input type="text" class="w3-input w3-border-blue requerido correo" name="email" id="email" placeholder="Correo">
+                          </div>
+                        </div>
+                        <div class="col-md-6 col-sm-6 ">
+                          <div class="form-group ">
+                            <label>Contraseña:</label>
+                            <input type="password" class="w3-input w3-border-blue requerido numeros_letras" name="password" id="password" placeholder="Contraseña">
+                          </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 ">
                           <div class="form-group ">
                             <label>Archivo:</label>
                             <input type="file" class="w3-input w3-border-blue " name="archivo" id="archivo">

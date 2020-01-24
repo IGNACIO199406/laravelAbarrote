@@ -9,3 +9,6 @@ for (index = 0; index < adiocionalesDatatable.length; index++) {
     columnasDatatable.splice(contadorSplice, 0, adiocionalesDatatable[index]);
     contadorSplice = contadorSplice + 1;
 }
+
+
+columnasDatatable.push(accionesDatatable);

@@ -16,6 +16,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
                         "registroError"=>"El registro esta duplicado",
                         "loginError"=>"Usuario o contrasena incorrectos",
                         "sistemaError"=>"Hay un error en el sistema",
+                        "ajusteExitoso"=>"Serealizo con exito el ajuste",
                     ];
 
         return $mensajeList;
@@ -28,5 +29,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
         $this->registroError=$mensajeList["registroError"];
         $this->loginError=$mensajeList["loginError"];
         $this->sistemaError=$mensajeList["sistemaError"];
+        $this->ajusteExitoso=$mensajeList["ajusteExitoso"];
     }
 }

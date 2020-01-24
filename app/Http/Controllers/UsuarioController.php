@@ -2,6 +2,7 @@
 namespace App\Http\Controllers;
 use App\Usuarios as modelado;
 use App\CatalogoModel as modeladoCatalogo;
+use App\RolesModel as modeladoRolesModel;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -10,7 +11,8 @@ class UsuarioController extends Controller
     public function index()
     {
         $datos = modeladoCatalogo::all();
-        return view('usuario/usuario')->with('datos', $datos);    
+        $Roles = modeladoRolesModel::all();
+        return view('usuario/usuario')->with('datos', $datos)->with('roles', $Roles);
     }
     
     public function login(Request $request)
@@ -19,7 +21,7 @@ class UsuarioController extends Controller
             $result = array();   
             $email = $request->input('email');
             $password = $request->input('password');
-            $consulta = Usuarios::where("email","=",$email)
+            $consulta = modelado::where("email","=",$email)
                                 ->where("password","=",$password)
                                 ->where("status","=",1)
                                 ->selectRaw('count(*) as contador')
@@ -50,6 +52,9 @@ class UsuarioController extends Controller
         try {
             $nombre = $request->input('Nombre');
             $file = $request->file('archivo');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $ID_Rol = $request->input('ID_Rol');
             $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
             $raiz = 'img';
             $carpeta = "usuario";
@@ -59,15 +64,17 @@ class UsuarioController extends Controller
                 $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
             } else {
                 $result = array();
-                $consulta = modelado::where("nombre", "=", $nombre)
+                $consulta = modelado::where("email", "=", $email)
                     ->selectRaw('count(*) as contador')
                     ->first();
                 $resul = $consulta["contador"];
                 if ($resul == 0) {
                     $query = new modelado();
+                    $query->ID_Portal = 1;
+                    $query->ID_Rol = $ID_Rol;
                     $query->nombre = $nombre;
-                    $query->email = "ignacio_juego@hotmail.com";
-                    $query->password = "12345";
+                    $query->email = $email;
+                    $query->password = $password;
                     $query->archivo = $archivo;
                     $query->status = '1';
                     $query->created_at = $query->freshTimestamp();

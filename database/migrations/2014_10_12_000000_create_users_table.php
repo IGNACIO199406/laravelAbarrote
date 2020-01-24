@@ -15,6 +15,8 @@ class CreateUsersTable extends Migration
     {
         Schema::create('usuario', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('ID_Portal');
+            $table->integer('ID_Rol');
             $table->string('nombre',45);
             $table->string('email',90);
             $table->string('password');
@@ -30,9 +32,10 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
-        Schema::create('tipo_usuario', function (Blueprint $table) {
+        Schema::create('portal', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',45);
+            $table->string('archivo',255);
             $table->string('status',2);
             $table->timestamps();
         });
@@ -90,7 +93,7 @@ class CreateUsersTable extends Migration
     {
         Schema::drop('usuario');
         Schema::drop('estatus');
-        Schema::drop('tipo_usuario');
+        Schema::drop('portal');
         Schema::drop('catalogo');
         Schema::drop('marca');
         Schema::drop('rol');

@@ -1,5 +1,10 @@
 @extends('layaud')
 @section('titulo','Catalogo')
+
+@section('cards')
+  @include('cards')
+@endsection
+
 @section('conten')
 <div class="">
   <div class="col-lg-12 col-xs-12 w3-white">
@@ -24,7 +29,7 @@
       <div class="modal fade" id="Modal-InUp_Catalogo">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div  class="modal-header w3-blue">
+            <div class="modal-header w3-blue">
               <h3 class="modal-title w3-center" id="Modal-Titulo"></h3>
             </div>
             <div class="row">
@@ -49,7 +54,7 @@
                             <select name="parent" id="parent" class="w3-input w3-border-blue ">
                               <option value="0">Padre</option>
                             </select>
-                            
+
                           </div>
                         </div>
                       </div>

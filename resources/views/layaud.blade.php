@@ -144,34 +144,6 @@
           </li>
           @endif
         @endforeach
-          <!-- <li class="treeview">
-            <a href="">
-              <i class="fa fa-dashboard"></i> <span>Administracion</span>
-              <span class="pull-right-container">
-                <i class="fa fa-angle-left pull-right"></i>
-              </span>
-            </a>
-            <ul class="treeview-menu">
-              //class="active"
-              <li><a href="{{ route('usuarioVista') }}"><i class="fa fa-circle-o"></i> Usuario</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Rol</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Almacen</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Proveedor</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Producto</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Permiso</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Venta</a></li>
-              <li><a href="{{ route('marcaVista') }}"><i class="fa fa-circle-o"></i> Marca</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Categoria</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Pais</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Estado</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Municipio</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Sucursal</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Empresa</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Cliente</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Empleado</a></li>
-              <li><a href="{{ route('proveedorVista') }}"><i class="fa fa-circle-o"></i> Bitacora</a></li>
-            </ul>
-          </li> -->
         </ul>
       </section>
       <!-- /.sidebar -->
@@ -184,81 +156,7 @@
 -->
     <div class="content-wrapper">
       <section class="content">
-        <div class="row">
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-aqua">
-              <div class="inner">
-                <h3>150</h3>
-
-                <p>Nuevo registro</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-database w3-text-white"></i>
-              </div>
-              <a class="small-box-footer w3-cursor-pointer" data-toggle="modal" data-target="" id="botonRegistro">Registrar <i class="fa fa-arrow-circle-right "></i></a>
-            </div>
-          </div>
-<!-- 
-          <div class="col-lg-3 col-xs-6">
-            small box 
-            <div class="small-box bg-purple">
-              <div class="inner">
-                <h3>150</h3>
-                <p>Registro Masivo</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-database w3-text-white"></i>
-              </div>
-              <a class="small-box-footer " data-toggle="modal" data-target="">Registrar <i class="fa fa-arrow-circle-right "></i></a>
-            </div>
-          </div>-->
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-green">
-              <div class="inner">
-                <h3>53</h3>
-
-                <p>Reporte excel</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-file-excel-o w3-text-white"></i>
-              </div>
-              <a href="#" class="small-box-footer">Descargar <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-yellow">
-              <div class="inner">
-                <h3>44</h3>
-                <p>Reporte Json</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-file-code-o w3-text-white"></i>
-              </div>
-              <a href="#" class="small-box-footer">Descargar <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-          <div class="col-lg-3 col-xs-6">
-            <!-- small box -->
-            <div class="small-box bg-red">
-              <div class="inner">
-                <h3>65</h3>
-
-                <p>Reporte pdf</p>
-              </div>
-              <div class="icon">
-                <i class="fa fa-file-pdf-o w3-text-white"></i>
-              </div>
-              <a href="#" class="small-box-footer">Descargar <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-          </div>
-          <!-- ./col -->
-        </div>
+        @yield('cards')
         @yield('conten')
       </section>
     </div>
@@ -359,5 +257,4 @@
  
 </body>
 <script src="../js/generalDatatable.js"></script>
-
 </html>

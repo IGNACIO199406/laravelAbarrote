@@ -10,7 +10,9 @@ class DatabaseSeeder extends Seeder
      * php artisan db:seed             --insertar registros
      * php artisan migrate:reset       --todas las migraciones
      * php artisan migrate:rollback    --ultima migracion
+     * php artisan make:model PermisosModel  --crear modelos
      * composer dump-autoload
+     * php artisan make:seeder UsersT  --crear seeders
      * @return void
      */
     public function run()
@@ -22,5 +24,8 @@ class DatabaseSeeder extends Seeder
         $this->call(Catalogo::class);
         $this->call(Accion::class);
         $this->call(Rol::class);
+        $this->call(Portal::class);
+        $this->call(Usuario::class);
     }
 }
+
