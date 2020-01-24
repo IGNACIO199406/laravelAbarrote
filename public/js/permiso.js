@@ -40,11 +40,11 @@ function detallePermiso(id) {
                             // console.log(registros.data[dato].accion[key].status)
                             if (registros.data[dato].accion[key].status == '1') {
                                 cadena += '<th class="w3-center w3-cursos-pointer">' +
-                                    '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ",'registroActive'" + ')" class="iconoDelete fa fa-check fa-2x w3-text-green" > </i>' +
+                                    '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ',' + registros.id + ",'registroActive'" + ')" class="iconoDelete fa fa-check fa-2x w3-text-green" > </i>' +
                                     '</th>';
                             } else {
                                 cadena += '<th class="w3-center w3-cursos-pointer">' +
-                                    '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ",'registroDesActive'" + ')" class="iconoDelete fa fa-check fa-2x w3-text-red" > </i>' +
+                                    '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ',' + registros.id + ",'registroDesActive'" + ')" class="iconoDelete fa fa-times fa-2x w3-text-red" > </i>' +
                                     '</th>';
                             }
                         }
@@ -141,6 +141,28 @@ function ajustePermiso(idRol) {
 }
 
 
-function activePermiso(idPermiso, accion) {
+function activePermiso(idPermiso, idRol, accion) {
     console.log(idPermiso + " " + accion);
+    if (accion == "registroDesActive") {
+        var status = "1";
+    } else {
+        var status = "0";
+    }
+    $.ajax({
+        type: 'GET',
+        url: 'permiso/actualiza/' + idPermiso + '/' + status,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(Datos) {
+            registros = JSON.parse(Datos);
+            switch (registros.succes) {
+                case 'ok':
+                    detallePermiso(idRol);
+                    break;
+                case 'error':
+                    break;
+            }
+        }
+    });
 }

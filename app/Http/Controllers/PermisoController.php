@@ -119,8 +119,25 @@ class PermisoController extends Controller
             }
 
 
-            $data = ["rol" => $listaRol['nombre'], "data" => $catalogoArray];
+            $data = ["id" => $listaRol['id'],"rol" => $listaRol['nombre'], "data" => $catalogoArray];
             $result = $data;
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
+    }
+
+
+    public function activePermiso(Request $request, $ID, $status)
+    {
+        try {
+            $query = modelado::where('id', '=', $ID)->first();
+            if ($query == true) {
+                $query->status = $status;
+                $query->updated_at = $query->freshTimestamp();
+                $query->save();
+            }
+            $result = ["succes" => 'ok', "msg" => $this->ajusteExitoso];
         } catch (\Exception $e) {
             $result = ["succes" => 'error', "msg" => $this->sistemaError];
         }

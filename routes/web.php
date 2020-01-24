@@ -29,6 +29,7 @@ foreach ($arrayList as $rutaSelect) {
 $rutaSelect = "permiso";
 Route::get("/" . $rutaSelect . "/faltante", ucfirst($rutaSelect) . "Controller@faltantePermiso")->name($rutaSelect . "Faltante");
 Route::get("/" . $rutaSelect . "/ajuste/{id}", ucfirst($rutaSelect) . "Controller@ajustePermiso")->name($rutaSelect . "Ajuste");
+Route::get("/" . $rutaSelect . "/actualiza/{id}/{status}", ucfirst($rutaSelect) . "Controller@activePermiso")->name($rutaSelect . "activePermiso");
 $rutaSelect = "usuario";
 Route::get("/", ucfirst($rutaSelect) . "Controller@home")->name($rutaSelect . "Home");
 Route::post("/" . $rutaSelect . "/login", ucfirst($rutaSelect) . "Controller@login")->name($rutaSelect . "Login");
