@@ -90,17 +90,13 @@ class PermisoController extends Controller
         try {
             $row = array();
             $query = modelado::where('ID_Rol', '=', $ID)->get();
-
-
-
             $listaCatalogo = modeladoCatalogo::all();
             $listaAccion = modeladoAccion::all();
-
             $listaRol = modeladoRol::where("id", "=", $ID)->first();
             $listaPermiso = modelado::where('ID_Rol', '=', $ID)->get();
             $consultaPermiso = modelado::where("ID_Rol", "=", $ID)->selectRaw('count(*) as contador')->first();
             $resulPermiso = $consultaPermiso["contador"];
-            if ($resulPermiso!=0) {
+            if ($resulPermiso != 0) {
                 foreach ($listaCatalogo as $campoCatalogo) {
                     foreach ($listaAccion as $campoAccion) {
                         foreach ($listaPermiso as $campoPermiso) {
@@ -109,17 +105,15 @@ class PermisoController extends Controller
                                 $idPermiso = $campoPermiso->id;
                             }
                         }
-                        $accionArray[] = ["id"=>$idPermiso,"accion" => $campoAccion->nombre, "status" => $status];
+                        $accionArray[] = ["id" => $idPermiso, "accion" => $campoAccion->nombre, "status" => $status];
                     }
-                    $catalogoArray[] = ["catalogo" => $campoCatalogo->nombre, "accion" => $accionArray];
+                    $catalogoArray[] = ["id" => $campoCatalogo->id, "catalogo" => $campoCatalogo->nombre, "accion" => $accionArray];
                     $accionArray = array();
                 }
-            }else{
+            } else {
                 $catalogoArray = array();
             }
-
-
-            $data = ["id" => $listaRol['id'],"rol" => $listaRol['nombre'], "data" => $catalogoArray];
+            $data = ["id" => $listaRol['id'], "rol" => $listaRol['nombre'], "data" => $catalogoArray];
             $result = $data;
         } catch (\Exception $e) {
             $result = ["succes" => 'error', "msg" => $this->sistemaError];
@@ -137,6 +131,19 @@ class PermisoController extends Controller
                 $query->updated_at = $query->freshTimestamp();
                 $query->save();
             }
+            $result = ["succes" => 'ok', "msg" => $this->ajusteExitoso];
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
+    }
+
+    public function activePermisoCatalogo(Request $request, $ID,$ID_Rol, $status)
+    {
+        try {
+            $query = modelado::where('ID_Catalogo', $ID)
+                ->where('ID_Rol', $ID_Rol)
+                ->update(['status' => $status]);
             $result = ["succes" => 'ok', "msg" => $this->ajusteExitoso];
         } catch (\Exception $e) {
             $result = ["succes" => 'error', "msg" => $this->sistemaError];

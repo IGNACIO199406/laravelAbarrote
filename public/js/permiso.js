@@ -31,7 +31,7 @@ function detallePermiso(id) {
             $("#faltantePermiso").html();
             if (registros.length != 0) {
                 if (registros.data.length != 0) {
-
+                    var contadorStatus = 0;
                     for (const dato in registros.data) {
                         // console.log(registros.data[dato].catalogo)
                         cadena += '<tr> <th class="">' + registros.data[dato].catalogo + '</th>';
@@ -42,13 +42,27 @@ function detallePermiso(id) {
                                 cadena += '<th class="w3-center w3-cursos-pointer">' +
                                     '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ',' + registros.id + ",'registroActive'" + ')" class="iconoDelete fa fa-check fa-2x w3-text-green" > </i>' +
                                     '</th>';
+                                contadorStatus = contadorStatus + 1;
                             } else {
                                 cadena += '<th class="w3-center w3-cursos-pointer">' +
                                     '<i onclick="activePermiso(' + registros.data[dato].accion[key].id + ',' + registros.id + ",'registroDesActive'" + ')" class="iconoDelete fa fa-times fa-2x w3-text-red" > </i>' +
                                     '</th>';
                             }
+
+
                         }
+                        if (contadorStatus != 7) {
+                            cadena += '<th class="w3-center w3-cursos-pointer">' +
+                                '<i onclick="activePermisoCatalogo(' + registros.data[dato].id + ',' + registros.id + ",'registroDesActive'" + ')" class="iconoDelete fa fa-refresh fa-2x w3-text-green" > </i> ' +
+                                '</th>';
+                        } else {
+                            cadena += '<th class="w3-center w3-cursos-pointer">' +
+                                '<i onclick="activePermisoCatalogo(' + registros.data[dato].id + ',' + registros.id + ",'registroActive'" + ')" class="iconoDelete fa fa-refresh fa-2x w3-text-red" > </i> ' +
+                                '</th>';
+                        }
+
                         cadena += '</tr>';
+                        var contadorStatus = 0;
                     }
                     $("#detallePermisos").html('<div class="w3-col m8  w3-padding ">' +
                         '<div class="w3-white w3-card 4 ">' +
@@ -67,6 +81,7 @@ function detallePermiso(id) {
                         '<th class="w3-center">Detalle</th>' +
                         '<th class="w3-center">Activa</th>' +
                         '<th class="w3-center">Reporte</th>' +
+                        '<th class="w3-center">Acciones</th>' +
                         '</tr>' +
                         '</thead>' +
                         ' <tbody>' +
@@ -142,7 +157,6 @@ function ajustePermiso(idRol) {
 
 
 function activePermiso(idPermiso, idRol, accion) {
-    console.log(idPermiso + " " + accion);
     if (accion == "registroDesActive") {
         var status = "1";
     } else {
@@ -151,6 +165,31 @@ function activePermiso(idPermiso, idRol, accion) {
     $.ajax({
         type: 'GET',
         url: 'permiso/actualiza/' + idPermiso + '/' + status,
+        contentType: false,
+        cache: false,
+        processData: false,
+        success: function(Datos) {
+            registros = JSON.parse(Datos);
+            switch (registros.succes) {
+                case 'ok':
+                    detallePermiso(idRol);
+                    break;
+                case 'error':
+                    break;
+            }
+        }
+    });
+}
+
+function activePermisoCatalogo(idCatalogo, idRol, accion) {
+    if (accion == "registroDesActive") {
+        var status = "1";
+    } else {
+        var status = "0";
+    }
+    $.ajax({
+        type: 'GET',
+        url: 'permiso/actualiza/catalogo/' + idCatalogo + '/' + idRol + '/' + status,
         contentType: false,
         cache: false,
         processData: false,
