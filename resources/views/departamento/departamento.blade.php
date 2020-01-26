@@ -1,11 +1,13 @@
 @extends('layaud')
-@section('titulo','Marca')
+@section('titulo','Departamento')
 @section('conten')
+
 @section('cards')
   @include('cards')
 @endsection
-  <div class="col-lg-12 col-xs-12 w3-white w3-padding">
-    <table id="listaMarca" class="display" style="width:100%">
+
+  <div class="col-lg-12 col-xs-12 w3-white">
+    <table id="listaDepartamento" class="display" style="width:100%">
       <thead>
         <tr>
           <th>Clave</th>
@@ -23,8 +25,8 @@
 
     @section('formulario')
     <!-- Registrar -->
-    <form class="validar Modal" id="InUp_Marca" name="InUp_Marca" enctype="multipart/form-data">
-      <div class="modal fade" id="Modal-InUp_Marca">
+    <form class="validar Modal" id="InUp_Departamento" name="InUp_Departamento" enctype="multipart/form-data">
+      <div class="modal fade" id="Modal-InUp_Departamento">
         <div class="modal-dialog">
           <div class="modal-content">
             <div  class="modal-header w3-blue">
@@ -75,5 +77,5 @@
     @endsection
 
     @section('archivosDedicados')
-    <script src="../js/marca.js"></script>
+    <script src="../js/departamento.js"></script>
     @endsection

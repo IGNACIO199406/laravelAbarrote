@@ -7,11 +7,27 @@
 php artisan make:controller Marca
 */
 
-$arrayList = ["usuario" => "usuario", "marca" => "marca", "proveedor" => "proveedor", 
-              "categoria" => "categoria", "producto" => "producto", "catalogo" => "catalogo",
-              "rol" => "rol", "cliente" => "cliente", "permiso" => "permiso", "accion" => "accion"];
+$arrayList = [
+    "usuario" => "usuario",
+    "cliente" => "cliente",
+    "proveedor" => "proveedor",
+    "sucursal" => "sucursal",
+    "estatus" => "estatus",
+    "portal" => "portal",
+    "catalogo" => "catalogo",
+    "marca" => "marca",
+    "rol" => "rol",
+    "accion" => "accion",
+    "permiso" => "permiso",
+    "producto" => "producto",
+    "departamento" => "departamento",
+    "agenda" => "agenda",
+    "dia" => "dia",
+    "venta" => "venta",
+    "categoria" => "categoria",     
+    "unidad" => "unidad"
+];
 
-              
 foreach ($arrayList as $rutaSelect) {
     Route::get("/" . $rutaSelect . "/", ucfirst($rutaSelect) . "Controller@index")->name($rutaSelect . "Vista");
     Route::get("/" . $rutaSelect . "/lista", ucfirst($rutaSelect) . "Controller@list")->name($rutaSelect . "Lista");
@@ -34,4 +50,3 @@ Route::get("/" . $rutaSelect . "/actualiza/catalogo/{id}/{idRol}/{status}", ucfi
 $rutaSelect = "usuario";
 Route::get("/", ucfirst($rutaSelect) . "Controller@home")->name($rutaSelect . "Home");
 Route::post("/" . $rutaSelect . "/login", ucfirst($rutaSelect) . "Controller@login")->name($rutaSelect . "Login");
- 

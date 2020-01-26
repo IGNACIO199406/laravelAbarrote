@@ -245,7 +245,7 @@
   <script src="../dist/js/pages/dashboard.js"></script>
   <script src="../css/VanillaToasts-master/vanillatoasts.js"></script>
   <script src="../js/config_global.js"></script>
-  <script src="../js/datatable.js"></script>
+  <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
 
   <!--
 |--------------------------------------------------------------------------
@@ -258,3 +258,6 @@
 </body>
 <script src="../js/generalDatatable.js"></script>
 </html>
+
+5551931983
+

@@ -1,4 +1,4 @@
-var idTablaLista = "Marca";
+var idTablaLista = "Departamento";
 var contadorSplice = 2;
 var adiocionalesDatatable = [
     { "data": "archivo" }
@@ -9,7 +9,6 @@ for (index = 0; index < adiocionalesDatatable.length; index++) {
     columnasDatatable.splice(contadorSplice, 0, adiocionalesDatatable[index]);
     contadorSplice = contadorSplice + 1;
 }
-
-//agregar acciones de los que no son generaes
-columnasDatatable.push(accionesDatatable);
 //php artisan make: seeder CatalogoTableSeeder
+
+columnasDatatable.push(accionesDatatable);

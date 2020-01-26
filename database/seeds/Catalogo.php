@@ -92,6 +92,42 @@ class Catalogo extends Seeder
                 "status" => "1",
                 'created_at' => date('Y-m-d H:m:s'),
                 'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 10,
+                "nombre" => "Departamento",
+                "url" => "",
+                "parent" => "1",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 11,
+                "nombre" => "Producto",
+                "url" => "",
+                "parent" => "1",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 12,
+                "nombre" => "Unidad",
+                "url" => "",
+                "parent" => "1",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 13,
+                "nombre" => "estatus",
+                "url" => "",
+                "parent" => "1",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
             ]
         ]);
     }

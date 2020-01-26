@@ -15,18 +15,61 @@ class CreateUsersTable extends Migration
     {
         Schema::create('usuario', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ID_Portal');
-            $table->integer('ID_Rol');
+            $table->integer('idSucursal');
+            $table->integer('idPortal');
+            $table->integer('idRol');
+            $table->string('codigoBarra',255);
             $table->string('nombre',45);
+            $table->string('apellidoPaterno',45);
+            $table->string('apellidoMaterno',45);
             $table->string('email',90);
-            $table->string('password');
+            $table->string('telefono',12);
+            $table->text('domicilio');
+            $table->text('password');
             $table->string('archivo',255);
+            $table->double('puntos', 7, 2);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('proveedor', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idUsuario');
+            $table->string('codigoBarra',255);
+            $table->string('nombre',45);
+            $table->string('apellidoPaterno',45);
+            $table->string('apellidoMaterno',45);
+            $table->string('email',90);
+            $table->string('telefono',12);
+            $table->string('razonSocial',45);
+            $table->text('domicilio');
+            $table->text('password');
+            $table->string('archivo',255);
+            $table->double('puntos', 7, 2);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('cliente', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idUsuario');
+            $table->string('codigoBarra',255);
+            $table->string('nombre',45);
+            $table->string('apellidoPaterno',45);
+            $table->string('apellidoMaterno',45);
+            $table->string('email',90);
+            $table->string('telefono',12);
+            $table->text('domicilio');
+            $table->text('password');
+            $table->string('archivo',255);
+            $table->double('puntos', 7, 2);
             $table->string('status',2);
             $table->timestamps();
         });
 
         Schema::create('estatus', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('valor');
             $table->string('nombre',45);
             $table->string('status',2);
             $table->timestamps();
@@ -40,6 +83,13 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('sucursal', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
         Schema::create('catalogo', function (Blueprint $table) {
             $table->increments('id');
             $table->string('nombre',45);
@@ -75,13 +125,84 @@ class CreateUsersTable extends Migration
 
         Schema::create('permiso', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('ID_Rol');
-            $table->integer('ID_Accion');
-            $table->integer('ID_Catalogo');
+            $table->integer('idRol');
+            $table->integer('idAccion');
+            $table->integer('idCatalogo');
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('producto', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idMarca');
+            $table->integer('idDepartamento');
+            $table->integer('idUnidad');
+            $table->string('codigoBarra',255);
+            $table->string('nombre',255);
+            $table->integer('stock');
+            $table->double('precioCompra', 7, 2);
+            $table->double('precioVenta', 7, 2);
+            $table->text('descripcion');
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('agenda', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idCatalogo');
+            $table->integer('idCatalogoUsuario');
+            $table->integer('idUsuario');
+            $table->text('descripcion');
             $table->string('status',2);
             $table->timestamps();
         });
         
+        Schema::create('departamento', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('unidad', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('archivo',255);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('dia', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('nombre',45);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('venta', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idUsuario');
+            $table->integer('idCatalogo');
+            $table->integer('idUCP');
+            $table->double('puntos', 7, 2);
+            $table->double('efectivo', 7, 2);
+            $table->double('tarjeta', 7, 2);
+            $table->string('status',2);
+            $table->timestamps();
+        });
+
+        Schema::create('ventaDetalle', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('idVenta');
+            $table->integer('idProducto');
+            $table->integer('cantidad');
+            $table->double('precioCompra', 7, 2);
+            $table->double('precioVenta', 7, 2);
+            $table->string('status',2);
+            $table->timestamps();
+        });
     }
 
     /**
@@ -92,6 +213,9 @@ class CreateUsersTable extends Migration
     public function down()
     {
         Schema::drop('usuario');
+        Schema::drop('cliente');
+        Schema::drop('proveedor');
+        Schema::drop('sucursal');
         Schema::drop('estatus');
         Schema::drop('portal');
         Schema::drop('catalogo');
@@ -99,5 +223,12 @@ class CreateUsersTable extends Migration
         Schema::drop('rol');
         Schema::drop('accion');
         Schema::drop('permiso');
+        Schema::drop('producto');
+        Schema::drop('departamento');
+        Schema::drop('agenda');
+        Schema::drop('dia');
+        Schema::drop('venta');
+        Schema::drop('ventaDetalle');
+        Schema::drop('unidad');
     }
 }

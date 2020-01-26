@@ -2,7 +2,9 @@
 @section('titulo','Usuario')
 @section('conten')
 
-<div class="">
+@section('cards')
+  @include('cards')
+@endsection
   <div class="col-lg-12 col-xs-12 w3-white">
     <table id="listaUsuario" class="display" style="width:100%">
       <thead>
@@ -17,6 +19,7 @@
         </tr>
       </thead>
     </table>
+  </div>
     @endsection
 
     @section('formulario')

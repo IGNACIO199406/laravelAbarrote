@@ -22,6 +22,19 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
         return $mensajeList;
     }
 
+    public function generadorClaves()
+    {
+        $str = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        $password = "";
+        $longitud = 10;
+        //Reconstruimos la contraseña segun la longitud que se quiera
+        for($i=0;$i<$longitud;$i++) {
+           //obtenemos un caracter aleatorio escogido de la cadena de caracteres
+           $password .= substr($str,rand(0,62),1);
+        }
+        return $password;
+    }
+
     public function __construct(){
         $mensajeList=$this->mensajeList();
         $this->registroExitoso=$mensajeList["registroExitoso"];
@@ -30,5 +43,6 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
         $this->loginError=$mensajeList["loginError"];
         $this->sistemaError=$mensajeList["sistemaError"];
         $this->ajusteExitoso=$mensajeList["ajusteExitoso"];
+        $this->generadorClave=$this->generadorClaves();
     }
 }

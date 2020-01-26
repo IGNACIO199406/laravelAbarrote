@@ -28,7 +28,7 @@ class PermisoController extends Controller
             $totalRegistros = (1 * $resulAccion) * $resulCatalogo;
             $datos = modeladoRol::all();
             foreach ($datos as $dato) {
-                $consultaPermiso = modelado::where("ID_Rol", "=", $dato->id)->selectRaw('count(*) as contador')->first();
+                $consultaPermiso = modelado::where("idRol", "=", $dato->id)->selectRaw('count(*) as contador')->first();
                 $resulPermiso = $consultaPermiso["contador"];
                 if ($totalRegistros != $resulPermiso) {
                     $row[] = ["id" => $dato->id, "nombre" => $dato->nombre];
@@ -50,16 +50,16 @@ class PermisoController extends Controller
             $idRol = $ID;
             foreach ($listaCatalogo as $campoCatalogo) {
                 foreach ($listaAccion as $campoAccion) {
-                    $consultaPermiso = modelado::where("ID_Rol", "=", $idRol)
-                        ->where("ID_Accion", "=", $campoAccion->id)
-                        ->where("ID_Catalogo", "=", $campoCatalogo->id)
+                    $consultaPermiso = modelado::where("idRol", "=", $idRol)
+                        ->where("idAccion", "=", $campoAccion->id)
+                        ->where("idCatalogo", "=", $campoCatalogo->id)
                         ->selectRaw('count(*) as contador')->first();
                     $resulPermiso = $consultaPermiso["contador"];
                     if ($resulPermiso == 0) {
                         $query = new modelado();
-                        $query->ID_Accion = $campoAccion->id;
-                        $query->ID_Catalogo = $campoCatalogo->id;
-                        $query->ID_Rol = $idRol;
+                        $query->idAccion = $campoAccion->id;
+                        $query->idCatalogo = $campoCatalogo->id;
+                        $query->idRol = $idRol;
                         $query->status = '1';
                         $query->created_at = $query->freshTimestamp();
                         $query->save();
@@ -89,18 +89,18 @@ class PermisoController extends Controller
 
         try {
             $row = array();
-            $query = modelado::where('ID_Rol', '=', $ID)->get();
+            $query = modelado::where('idRol', '=', $ID)->get();
             $listaCatalogo = modeladoCatalogo::all();
             $listaAccion = modeladoAccion::all();
             $listaRol = modeladoRol::where("id", "=", $ID)->first();
-            $listaPermiso = modelado::where('ID_Rol', '=', $ID)->get();
-            $consultaPermiso = modelado::where("ID_Rol", "=", $ID)->selectRaw('count(*) as contador')->first();
+            $listaPermiso = modelado::where('idRol', '=', $ID)->get();
+            $consultaPermiso = modelado::where("idRol", "=", $ID)->selectRaw('count(*) as contador')->first();
             $resulPermiso = $consultaPermiso["contador"];
             if ($resulPermiso != 0) {
                 foreach ($listaCatalogo as $campoCatalogo) {
                     foreach ($listaAccion as $campoAccion) {
                         foreach ($listaPermiso as $campoPermiso) {
-                            if ($campoCatalogo->id == $campoPermiso->ID_Catalogo and $campoAccion->id == $campoPermiso->ID_Accion) {
+                            if ($campoCatalogo->id == $campoPermiso->idCatalogo and $campoAccion->id == $campoPermiso->idAccion) {
                                 $status = $campoPermiso->status;
                                 $idPermiso = $campoPermiso->id;
                             }
@@ -138,11 +138,11 @@ class PermisoController extends Controller
         return json_encode($result);
     }
 
-    public function activePermisoCatalogo(Request $request, $ID,$ID_Rol, $status)
+    public function activePermisoCatalogo(Request $request, $ID,$idRol, $status)
     {
         try {
-            $query = modelado::where('ID_Catalogo', $ID)
-                ->where('ID_Rol', $ID_Rol)
+            $query = modelado::where('idCatalogo', $ID)
+                ->where('idRol', $idRol)
                 ->update(['status' => $status]);
             $result = ["succes" => 'ok', "msg" => $this->ajusteExitoso];
         } catch (\Exception $e) {
