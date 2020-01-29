@@ -35,6 +35,7 @@ class CreateUsersTable extends Migration
         Schema::create('proveedor', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('idUsuario');
+            $table->integer('idMarca');
             $table->string('codigoBarra',255);
             $table->string('nombre',45);
             $table->string('apellidoPaterno',45);

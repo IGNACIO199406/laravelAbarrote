@@ -1,8 +1,8 @@
  /*
-                                                                                                                                                                                                                                                                                            ------------------------------------------------
-                                                                                                                                                                                                                                                                                            Insert Update Delete
-                                                                                                                                                                                                                                                                                            ------------------------------------------------
-                                                                                                                                                                                                                                                                                            */
+                                                                                                                                                                                                                                                                                                                                                                                                  ------------------------------------------------
+                                                                                                                                                                                                                                                                                                                                                                                                  Insert Update Delete
+                                                                                                                                                                                                                                                                                                                                                                                                  ------------------------------------------------
+                                                                                                                                                                                                                                                                                                                                                                                                  */
 
  //declaracion de variables
  var letras, numeros, correo, Contador, array_inputs, i, x, Search_required, Input_validar, Input_validar_texto, Input_validar_numeros, Input_validar_correo, ID_Form;
@@ -201,19 +201,28 @@
      }
  };
  var createdAtDatatable = {
-     "data": "created_at"
+     "data": "created_at",
+     "type": 'date',
+     "render": function(data, type, row) { return moment(data).format('DD-MM-YYYY'); }
  };
  var updatedAtDatatable = {
-     "data": "updated_at"
+     "data": "updated_at",
+     "type": 'date',
+     "render": function(data, type, row) { return moment(data).format('DD-MM-YYYY'); }
  };
 
  var accionesDatatable = {
      "render": function(data, type, row) {
+         var permisoDelete = $("#permisoDelete").html();
+         var permisoActive = $("#permisoActive").html();
+         var permisoActualiza = $("#permisoActualiza").html();
+         var validaPermisoDelete = permisoDelete == '1' ? '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-trash fa-2x w3-text-red" style="cursor: pointer;" > </i> ' : ' ';
+         var validaPermisoActualiza = permisoActualiza == '1' ? '<i onclick="funcionSelectId(' + row.id + ",'registroUpdate'" + ')" class="fa fa-edit fa-2x w3-text-orange" style="cursor: pointer;" > </i>' : ' ';
+         var validaPermisoActive = permisoActive == '1' ? '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-check-circle fa-2x w3-text-green" style="cursor: pointer;" > </i> ' : ' ';
          if (row.status == "1") {
-             action = '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-trash fa-2x w3-text-red" style="cursor: pointer;" > </i> ' +
-                 '<i onclick="funcionSelectId(' + row.id + ",'registroUpdate'" + ')" class="fa fa-edit fa-2x w3-text-orange" style="cursor: pointer;" > </i>';
+             action = validaPermisoDelete + validaPermisoActualiza;
          } else {
-             action = '<i onclick="funcionSelectId(' + row.id + ",'registroDelete'" + ')" class="iconoDelete fa fa-check-circle fa-2x w3-text-green" style="cursor: pointer;" > </i> ';
+             action = validaPermisoActive;
          }
          return action;
      }
@@ -256,7 +265,7 @@
      $("#Modal-Titulo").text("Actualiza Reistro");
      ID_Form = document.getElementsByTagName('form')["InUp_" + tabla];
      ID_Form["ID"].value = registroArray.id;
-     ID_Form["Nombre"].value = registroArray.nombre;
+     ID_Form["nombre"].value = registroArray.nombre;
      if (tabla.toLowerCase() == "catalogo") {
          $('#parent option[value=' + registroArray.parent + ']').prop("selected", true);
          var serial_attr = $("#parent option:selected").attr("serial");
@@ -265,6 +274,16 @@
          ID_Form["password"].value = registroArray.password;
          $('#ID_Rol option[value=' + registroArray.ID_Rol + ']').prop("selected", true);
          var serial_attr = $("#parent option:selected").attr("serial");
+     } else if (tabla.toLowerCase() == "producto") {
+         ID_Form["precioCompra"].value = registroArray.precioCompra;
+         ID_Form["stock"].value = registroArray.stock;
+         ID_Form["precioVenta"].value = registroArray.precioVenta;
+         ID_Form["descripcion"].value = registroArray.descripcion;
+         ID_Form["codigoBarra"].value = registroArray.codigoBarra;
+         $('#idMarca option[value=' + registroArray.idMarca + ']').prop("selected", true);
+         $('#idDepartamento option[value=' + registroArray.idDepartamento + ']').prop("selected", true);
+         $('#idUnidad option[value=' + registroArray.idUnidad + ']').prop("selected", true);
+
      }
      $("#Modal-InUp_" + tabla).modal("show");
  }

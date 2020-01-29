@@ -6,7 +6,9 @@
   @include('cards')
 @endsection
 
-  <div class="col-lg-12 col-xs-12 w3-white">
+<div class="row">
+  <div class="w3-padding">
+  <div class="col-lg-12 col-xs-12 w3-white w3-padding">
     <table id="listaUnidad" class="display" style="width:100%">
       <thead>
         <tr>
@@ -21,6 +23,8 @@
       </thead>
     </table>
   </div>
+  </div>
+</div>
     @endsection
 
     @section('formulario')

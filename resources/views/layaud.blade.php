@@ -34,6 +34,9 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link rel="stylesheet" href="../css/VanillaToasts-master/vanillatoasts.css">
 
+  <!-- jQuery 3 -->
+  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+  </script>
 </head>
 
 <body class="hold-transition fixed skin-blue sidebar-mini">
@@ -48,13 +51,13 @@
         <span class="logo-lg"><b>Port</b>-Kal</span>
       </a>
       <!-- Header Navbar: style can be found in header.less -->
-      <nav class="navbar navbar-static-top">
+      <nav class="navbar navbar-static-top ">
         <!-- Sidebar toggle button-->
         <a href="#" class="sidebar-toggle" data-toggle="push-menu" role="button">
           <span class="sr-only">Toggle navigation</span>
         </a>
 
-        <div class="navbar-custom-menu">
+        <div class="navbar-custom-menu ">
           <ul class="nav navbar-nav">
             <!-- User Account: style can be found in dropdown.less -->
             <li class="dropdown user user-menu">
@@ -93,7 +96,7 @@
                     <a href="#" class="btn btn-default btn-flat">Profile</a>
                   </div>
                   <div class="pull-right">
-                    <a href="{{ route('usuarioHome') }}" class="btn btn-default btn-flat">Sign out</a>
+                    <a href="{{ route('usuariocloseLogin') }}" class="btn btn-default btn-flat">Sign out</a>
                   </div>
                 </li>
               </ul>
@@ -123,27 +126,27 @@
 
           @foreach ($datos as $dato)
           @if ($dato->status==1)
-        <li class="treeview">
-        @if ($dato->parent==0)
-            <a >
+          <li class="treeview">
+            @if ($dato->parent==0)
+            <a>
               <i class="fa fa-dashboard"></i> <span>{{ $dato->nombre}}</span>
               <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
               </span>
             </a>
             @endif
-            
+
             <ul class="treeview-menu">
-            @foreach ($datos as $sub_dato)
-            @if ($sub_dato->parent==$dato->id) 
-            <li><a href="{{ route(strtolower($sub_dato->nombre).'Vista') }}"><i class="fa fa-circle-o"></i> {{$sub_dato->nombre}}</a></li>
-            @endif
-            @endforeach
-          </ul>
-        
+              @foreach ($datos as $sub_dato)
+              @if ($sub_dato->parent==$dato->id)
+              <li><a href="{{ route(strtolower($sub_dato->nombre).'Vista') }}"><i class="fa fa-circle-o"></i> {{$sub_dato->nombre}}</a></li>
+              @endif
+              @endforeach
+            </ul>
+
           </li>
           @endif
-        @endforeach
+          @endforeach
         </ul>
       </section>
       <!-- /.sidebar -->
@@ -155,10 +158,10 @@
 |--------------------------------------------------------------------------
 -->
     <div class="content-wrapper">
-      <section class="content">
+      <div class="content">
         @yield('cards')
         @yield('conten')
-      </section>
+      </div>
     </div>
 
     <footer class="main-footer">
@@ -177,12 +180,12 @@
 -->
   @yield('formulario')
 
- <!--
+  <!--
 |--------------------------------------------------------------------------
 | Modal delete general
 |--------------------------------------------------------------------------
 -->
-<form class="validar Modal" id="eliminaRegistro" name="eliminaRegistro" enctype="multipart/form-data">
+  <form class="validar Modal" id="eliminaRegistro" name="eliminaRegistro" enctype="multipart/form-data">
     <div class="modal fade" id="Modal-eliminaRegistro">
       <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -210,8 +213,7 @@
     </div>
   </form>
 
-  <!-- jQuery 3 -->
-  <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
   <!-- jQuery UI 1.11.4 -->
   <script src="../bower_components/jquery-ui/jquery-ui.min.js"></script>
   <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
@@ -254,10 +256,10 @@
 -->
   @yield('archivosDedicados')
 
- 
+
 </body>
 <script src="../js/generalDatatable.js"></script>
+
 </html>
 
 5551931983
-

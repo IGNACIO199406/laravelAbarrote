@@ -1,8 +1,9 @@
 @extends('layaud')
 @section('titulo','Accion')
 @section('conten')
-<div class="">
-  <div class="col-lg-12 col-xs-12 w3-white">
+<div class="row">
+  <div class="w3-padding">
+  <div class="col-lg-12 col-xs-12 w3-white w3-padding">
     <table id="listaAccion" class="display" style="width:100%">
       <thead>
         <tr>
@@ -10,12 +11,14 @@
           <th>Nombre</th>
           <th>Archivo</th>
           <th>Status.</th>
-          <th>Fecha registro</th>
-          <th>Fecha actualizacion</th>
-          <th>Acciones</th>
+          <th>Se-Registro</th>
+          <th>Se-Actualizó</th>
         </tr>
       </thead>
     </table>
+    </div>
+  </div>
+</div>
     @endsection
 
     @section('formulario')
@@ -24,7 +27,7 @@
       <div class="modal fade" id="Modal-InUp_Accion">
         <div class="modal-dialog">
           <div class="modal-content">
-            <div  class="modal-header w3-blue">
+            <div class="modal-header w3-blue">
               <h3 class="modal-title w3-center" id="Modal-Titulo"></h3>
             </div>
             <div class="row">

@@ -17,6 +17,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
                         "loginError"=>"Usuario o contrasena incorrectos",
                         "sistemaError"=>"Hay un error en el sistema",
                         "ajusteExitoso"=>"Serealizo con exito el ajuste",
+                        "sessionUsuario"=>"idUsuario",
                     ];
 
         return $mensajeList;
@@ -43,6 +44,7 @@ use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
         $this->loginError=$mensajeList["loginError"];
         $this->sistemaError=$mensajeList["sistemaError"];
         $this->ajusteExitoso=$mensajeList["ajusteExitoso"];
+        $this->sessionUsuario=$mensajeList["sessionUsuario"];
         $this->generadorClave=$this->generadorClaves();
     }
 }

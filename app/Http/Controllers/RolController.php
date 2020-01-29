@@ -2,6 +2,8 @@
 namespace App\Http\Controllers;
 use App\RolesModel as modelado;
 use App\CatalogoModel as modeladoCatalogo;
+use App\RolesModel as modeladoRol;
+use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
@@ -9,8 +11,31 @@ class RolController extends Controller
 {
     public function index()
     {
-        $datos = modeladoCatalogo::all();
-        return view('rol/rol')->with('datos', $datos);
+        if(session()->has($this->sessionUsuario)){
+            $sessionUsuario = session($this->sessionUsuario);
+           // session()->forget($this->sessionUsuario);
+            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Rol")
+                ->first();
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+                ->where("idAccion", "=", 1)
+                ->where("idCatalogo", "=", $queryCatalogo["id"])
+                ->first();
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+                ->Where("idCatalogo", "=", $queryCatalogo["id"])
+                ->Where("idAccion", "!=", 1)
+                ->get();
+            if($queryPermiso["status"]=="1"){
+                $datos = modeladoCatalogo::all();
+                $Roles = modeladoRol::all();
+                return view('rol/rol')->with('datos', $datos)->with('permisos', $queryPermisos);
+            }else{
+                return redirect('usuario/closeLogin'); 
+            }
+            
+        }else{
+            return view('usuario/login'); 
+            //return view('usuario/login'); 
+        }
     }
 
     public function create(Request $request)

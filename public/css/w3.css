@@ -1717,3 +1717,7 @@ a {
 .w3-cursos-pointer {
     cursor: pointer;
 }
+
+.w3-display-none {
+    display: none;
+}

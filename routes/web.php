@@ -50,3 +50,4 @@ Route::get("/" . $rutaSelect . "/actualiza/catalogo/{id}/{idRol}/{status}", ucfi
 $rutaSelect = "usuario";
 Route::get("/", ucfirst($rutaSelect) . "Controller@home")->name($rutaSelect . "Home");
 Route::post("/" . $rutaSelect . "/login", ucfirst($rutaSelect) . "Controller@login")->name($rutaSelect . "Login");
+Route::get("/" . $rutaSelect . "/closeLogin", ucfirst($rutaSelect) . "Controller@closeLogin")->name($rutaSelect . "closeLogin");

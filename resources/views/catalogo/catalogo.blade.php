@@ -2,25 +2,29 @@
 @section('titulo','Catalogo')
 
 @section('cards')
-  @include('cards')
+@include('cards')
 @endsection
 
 @section('conten')
-<div class="">
-  <div class="col-lg-12 col-xs-12 w3-white">
+<div class="row">
+  <div class="w3-padding">
+  <div class="col-lg-12 col-xs-12 w3-white w3-padding">
     <table id="listaCatalogo" class="display" style="width:100%">
       <thead>
         <tr>
           <th>Clave</th>
           <th>Nombre</th>
-          <th>Archivo</th>
+          <th>Icono</th>
           <th>Status.</th>
-          <th>Fecha registro</th>
-          <th>Fecha actualizacion</th>
+          <th>Se-Registro</th>
+          <th>Se-Actualizó</th>
           <th>Acciones</th>
         </tr>
       </thead>
     </table>
+    </div>
+  </div>
+</div>
     @endsection
 
     @section('formulario')

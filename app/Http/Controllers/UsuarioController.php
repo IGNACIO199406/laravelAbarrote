@@ -1,46 +1,86 @@
 <?php
+
 namespace App\Http\Controllers;
+
 use App\Usuarios as modelado;
 use App\CatalogoModel as modeladoCatalogo;
-use App\RolesModel as modeladoRolesModel;
+use App\RolesModel as modeladoRol;
+use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
 
 class UsuarioController extends Controller
 {
+    
     public function index()
     {
-        $datos = modeladoCatalogo::all();
-        $Roles = modeladoRolesModel::all();
-        return view('usuario/usuario')->with('datos', $datos)->with('roles', $Roles);
+        if(session()->has($this->sessionUsuario)){
+            $sessionUsuario = session($this->sessionUsuario);
+           // session()->forget($this->sessionUsuario);
+            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Usuario")
+                ->first();
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+                ->where("idAccion", "=", 1)
+                ->where("idCatalogo", "=", $queryCatalogo["id"])
+                ->first();
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+                ->Where("idCatalogo", "=", $queryCatalogo["id"])
+                ->Where("idAccion", "!=", 1)
+                ->get();
+            if($queryPermiso["status"]=="1"){
+                $datos = modeladoCatalogo::all();
+                $Roles = modeladoRol::all();
+                return view('usuario/usuario')->with('datos', $datos)->with('roles', $Roles)->with('permisos', $queryPermisos);
+            }else{
+                return redirect('usuario/closeLogin'); 
+            }
+            
+        }else{
+            return view('usuario/login'); 
+            //return view('usuario/login'); 
+        }
     }
-    
+
+    public function closeLogin()
+    {
+        session()->forget($this->sessionUsuario);
+        return redirect('/usuario');
+    }
+
     public function login(Request $request)
     {
         try {
-            $result = array();   
+            $result = array();
             $email = $request->input('email');
             $password = $request->input('password');
-            $consulta = modelado::where("email","=",$email)
-                                ->where("password","=",$password)
-                                ->where("status","=",1)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $resul=$consulta["contador"];
-            if($resul==1){
-              $result = ["succes"=>'ok',"msg"=>$this->loginExitoso];
-            }else{
-              $result = ["succes"=>'error',"msg"=>$this->loginError];
+            $consulta = modelado::where("email", "=", $email)
+                ->where("password", "=", $password)
+                ->where("status", "=", 1)
+                ->selectRaw('count(*) as contador')
+                ->first();
+            $resul = $consulta["contador"];
+            if ($resul == 1) {
+                $query = modelado::where("email", "=", $email)
+                ->first();
+                $sessionUsuario = session(['idUsuario' => $query["idRol"]]);
+                $result = ["succes" => 'ok', "msg" => $this->loginExitoso];
+            } else {
+                $result = ["succes" => 'error', "msg" => $this->loginError];
             }
         } catch (\Exception $e) {
-            $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-        return json_encode($result) ;
-    }   
+            $result = ["succes" => 'error', "msg" => $e->getMessage()];
+        }
+        return json_encode($result);
+    }
 
     public function home()
     {
-        return view('usuario/login');
+        if(session()->has($this->sessionUsuario)){
+            return redirect('/usuario');
+        }else{
+            return view('usuario/login'); 
+        }
     }
     /**
      * Show the form for creating a new resource.
@@ -64,7 +104,7 @@ class UsuarioController extends Controller
                 $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
             } else {
                 $result = array();
-                $generadorClave=$this->generadorClave;
+                $generadorClave = $this->generadorClave;
                 $consulta = modelado::where("email", "=", $email)
                     ->where("codigoBarra", "=", $generadorClave)
                     ->selectRaw('count(*) as contador')
@@ -75,7 +115,7 @@ class UsuarioController extends Controller
                     $query->idSucursal = 1;
                     $query->idPortal = 1;
                     $query->idRol = $ID_Rol;
-                    $query->codigoBarra = "OPE".$generadorClave;
+                    $query->codigoBarra = "OPE" . $generadorClave;
                     $query->nombre = $nombre;
                     $query->apellidoPaterno = $nombre;
                     $query->apellidoMaterno = $nombre;
@@ -115,14 +155,14 @@ class UsuarioController extends Controller
         try {
             $nombre = $request->input('Nombre');
             $id = $request->input('ID');
-            $consulta = modelado::where("nombre","=",$nombre)
-                                ->where("id","!=",$id)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $result=$consulta["contador"];
+            $consulta = modelado::where("nombre", "=", $nombre)
+                ->where("id", "!=", $id)
+                ->selectRaw('count(*) as contador')
+                ->first();
+            $result = $consulta["contador"];
             if ($result == 0) {
-                $query = modelado::where("id","=",$id)
-                                ->first();
+                $query = modelado::where("id", "=", $id)
+                    ->first();
                 $query->nombre = $nombre;
                 $query->created_at = $query->freshTimestamp();
                 $query->save();
