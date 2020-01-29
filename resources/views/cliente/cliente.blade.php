@@ -1,5 +1,5 @@
 @extends('layaud')
-@section('titulo','Usuario')
+@section('titulo','Cliente')
 @section('conten')
 
 @section('cards')
@@ -8,7 +8,8 @@
 <div class="row">
   <div class="w3-padding">
     <div class="col-lg-12 col-xs-12 w3-white w3-padding">
-      <table id="listaUsuario" class="display" style="width:100%">
+
+      <table id="listaCliente" class="display" style="width:100%">
         <thead>
           <tr>
             <th>Clave</th>
@@ -31,8 +32,8 @@
 
 @section('formulario')
 <!-- Registrar -->
-<form class="validar Modal" id="InUp_Usuario" name="InUp_Usuario" enctype="multipart/form-data">
-  <div class="modal fade bd-example-modal-lg" id="Modal-InUp_Usuario">
+<form class="validar Modal" id="InUp_Cliente" name="InUp_Cliente" enctype="multipart/form-data">
+  <div class="modal fade bd-example-modal-lg" id="Modal-InUp_Cliente">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header w3-blue">
@@ -48,18 +49,6 @@
                 {{ csrf_field() }}
                 <div class="row">
                   <div class="col-md-12 col-sm-12 ">
-                    <div class="col-md-12 col-sm-12 ">
-                      <div class="form-group ">
-                        <label>Roles:</label>
-                        <select class="w3-input w3-border-blue " name="idRol" name="idRol">
-                          @foreach ($roles as $rol)
-                          @if ($rol->status==1)
-                          <option value="{{$rol->id}}">{{$rol->nombre}}</option>
-                          @endif
-                          @endforeach
-                        </select>
-                      </div>
-                    </div>
                     <div class="col-md-4 col-sm-4 ">
                       <div class="form-group ">
                         <label>Nombre:</label>
@@ -78,29 +67,23 @@
                         <input type="text" class="w3-input w3-border-blue " name="apellidoMaterno" id="apellidoMaterno" placeholder="Apellido Materno">
                       </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 ">
+                    <div class="col-md-6 col-sm-6 ">
                       <div class="form-group ">
                         <label>Teléfono:</label>
                         <input type="text" class="w3-input w3-border-blue " name="telefono" id="telefono" placeholder="Teléfono">
                       </div>
                     </div>
-                    <div class="col-md-4 col-sm-4 ">
+                    <div class="col-md-6 col-sm-6 ">
                       <div class="form-group ">
                         <label>Correo:</label>
                         <input type="text" class="w3-input w3-border-blue requerido correo" name="email" id="email" placeholder="Correo">
-                      </div>
-                    </div>
-                    <div class="col-md-4 col-sm-4 ">
-                      <div class="form-group ">
-                        <label>Contraseña:</label>
-                        <input type="password" class="w3-input w3-border-blue requerido numeros_letras" name="password" id="password" placeholder="Contraseña">
                       </div>
                     </div>
                     <div class="col-md-12 col-sm-12 ">
                       <div class="col-md-6 col-sm-6 ">
                         <div class="form-group ">
                           <label>Dirección:</label>
-                          <textarea class="w3-input w3-border-blue " name="direccion" id="direccion" cols="30" rows="5" placeholder="Dirección"></textarea>
+                          <textarea class="w3-input w3-border-blue " name="domicilio" id="domicilio" cols="30" rows="5" placeholder="Dirección"></textarea>
                         </div>
                       </div>
                       <div class="col-md-6 col-sm-6 ">
@@ -132,5 +115,5 @@
 @endsection
 
 @section('archivosDedicados')
-<script src="../js/usuario.js"></script>
+<script src="../js/cliente.js"></script>
 @endsection

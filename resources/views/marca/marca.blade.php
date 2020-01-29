@@ -47,7 +47,7 @@
                     <div class="col-md-6 col-sm-6 ">
                       <div class="form-group ">
                         <label>Nombre:</label>
-                        <input type="text" class="w3-input w3-border-blue requerido texto" name="Nombre" id="Nombre" placeholder="Nombre">
+                        <input type="text" class="w3-input w3-border-blue requerido texto" name="nombre" id="nombre" placeholder="Nombre">
                       </div>
                     </div>
                     <div class="col-md-6 col-sm-6 ">

@@ -11,16 +11,16 @@ class UnidadController extends Controller
 {
     public function index()
     {
-        if(session()->has($this->sessionUsuario)){
-            $sessionUsuario = session($this->sessionUsuario);
+        if(session()->has($this->sessionPortKal)){
+            $sessionUsuario = session($this->sessionPortKal);
            // session()->forget($this->sessionUsuario);
             $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Unidad")
                 ->first();
-            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->where("idAccion", "=", 1)
                 ->where("idCatalogo", "=", $queryCatalogo["id"])
                 ->first();
-            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->Where("idCatalogo", "=", $queryCatalogo["id"])
                 ->Where("idAccion", "!=", 1)
                 ->get();

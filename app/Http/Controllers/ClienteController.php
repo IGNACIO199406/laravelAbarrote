@@ -1,20 +1,26 @@
 <?php
+
 namespace App\Http\Controllers;
-use App\DepartamentosModel as modelado;
+
+use App\ClientesModel as modelado;
 use App\CatalogoModel as modeladoCatalogo;
 use App\RolesModel as modeladoRol;
+use App\MarcasModel as modeladoMarca;
 use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
-class DepartamentoController extends Controller
+class ClienteController extends Controller
 {
+
     public function index()
     {
-        if(session()->has($this->sessionPortKal)){
+        if (session()->has($this->sessionPortKal)) {
             $sessionUsuario = session($this->sessionPortKal);
-           // session()->forget($this->sessionUsuario);
-            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Departamento")
+            // session()->forget($this->sessionUsuario);
+            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Cliente")
                 ->first();
             $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->where("idAccion", "=", 1)
@@ -24,42 +30,64 @@ class DepartamentoController extends Controller
                 ->Where("idCatalogo", "=", $queryCatalogo["id"])
                 ->Where("idAccion", "!=", 1)
                 ->get();
-            if($queryPermiso["status"]=="1"){
+            if ($queryPermiso["status"] == "1") {
                 $datos = modeladoCatalogo::all();
-                $Roles = modeladoRol::all();
-                return view('departamento/departamento')->with('datos', $datos)->with('permisos', $queryPermisos);
-            }else{
-                return redirect('usuario/closeLogin'); 
+                return view('cliente/cliente')->with('datos', $datos)->with('permisos', $queryPermisos);
+            } else {
+                return redirect('usuario/closeLogin');
             }
-            
-        }else{
-            return view('usuario/login'); 
+        } else {
+            return view('usuario/login');
             //return view('usuario/login'); 
         }
     }
 
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function create(Request $request)
     {
         try {
-            $nombre = $request->input('Nombre');
+            $date = Carbon::now();
+            $fecha = $date->day . $date->month . $date->year;
+            $sessionUsuario = session($this->sessionPortKal);
             $file = $request->file('archivo');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $email = $request->input('email');
+            $telefono = $request->input('telefono');
+            $domicilio = $request->input('domicilio');
             $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
             $raiz = 'img';
-            $carpeta = "departamento";
+            $carpeta = "cliente";
             $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
             file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
             if (file_exists($rutaArhcivo) == true && $archivo != "logo.png") {
                 $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
             } else {
                 $result = array();
-                $consulta = modelado::where("nombre", "=", $nombre)
+                $generadorClave = $this->generadorClave;
+                $consulta = modelado::where("email", "=", $email)
+                    ->orWhere("codigoBarra", "=", $generadorClave)
                     ->selectRaw('count(*) as contador')
                     ->first();
                 $resul = $consulta["contador"];
                 if ($resul == 0) {
                     $query = new modelado();
-                    $query->nombre = $nombre;
-                    $query->archivo = $archivo;
+                    $query->idUsuario = (int) $sessionUsuario["idUsuario"];
+                    $query->codigoBarra = (string) "CLI" . $fecha . $generadorClave;
+                    $query->nombre = (string) $nombre;
+                    $query->apellidoPaterno = (string) $apellidoPaterno;
+                    $query->apellidoMaterno = (string) $apellidoMaterno;
+                    $query->email = (string) $email;
+                    $query->telefono = (string) $telefono;
+                    $query->domicilio = (string) $domicilio;
+                    $query->password = (string) $generadorClave;
+                    $query->archivo = (string) $archivo;
+                    $query->puntos = 0.0;
                     $query->status = '1';
                     $query->created_at = $query->freshTimestamp();
                     $query->save();
@@ -88,18 +116,29 @@ class DepartamentoController extends Controller
     public function update(Request $request)
     {
         try {
-            $nombre = $request->input('Nombre');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $email = $request->input('email');
+            $razonSocial = $request->input('razonSocial');
+            $telefono = $request->input('telefono');
+            $domicilio = $request->input('domicilio');
             $id = $request->input('ID');
-            $consulta = modelado::where("nombre","=",$nombre)
-                                ->where("id","!=",$id)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $result=$consulta["contador"];
+            $consulta = modelado::where("email", "=", $email)
+                ->where("id", "!=", $id)
+                ->selectRaw('count(*) as contador')
+                ->first();
+            $result = $consulta["contador"];
             if ($result == 0) {
-                $query = modelado::where("id","=",$id)
-                                ->first();
-                $query->nombre = $nombre;
-                $query->created_at = $query->freshTimestamp();
+                $query = modelado::where("id", "=", $id)
+                    ->first();
+                $query->nombre = (string) $nombre;
+                $query->apellidoPaterno = (string) $apellidoPaterno;
+                $query->apellidoMaterno = (string) $apellidoMaterno;
+                $query->email = (string) $email;
+                $query->telefono = (string) $telefono;
+                $query->domicilio = (string) $domicilio;
+                $query->updated_at = $query->freshTimestamp();
                 $query->save();
                 $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
             } else {
@@ -131,7 +170,6 @@ class DepartamentoController extends Controller
 
     public function detalle(Request $request, $ID)
     {
-        
         try {
             $query = modelado::where('id', '=', $ID)->first();
             $result = $query;

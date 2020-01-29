@@ -9,22 +9,22 @@ use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Crypt;
-
+use Carbon\Carbon;
 class UsuarioController extends Controller
 {
     
     public function index()
     {
-        if(session()->has($this->sessionUsuario)){
-            $sessionUsuario = session($this->sessionUsuario);
-           // session()->forget($this->sessionUsuario);
+        if(session()->has($this->sessionPortKal)){
+            $sessionUsuario = session($this->sessionPortKal);
+            //session()->forget($this->sessionPortKal);
             $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Usuario")
                 ->first();
-            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->where("idAccion", "=", 1)
                 ->where("idCatalogo", "=", $queryCatalogo["id"])
                 ->first();
-            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->Where("idCatalogo", "=", $queryCatalogo["id"])
                 ->Where("idAccion", "!=", 1)
                 ->get();
@@ -44,7 +44,7 @@ class UsuarioController extends Controller
 
     public function closeLogin()
     {
-        session()->forget($this->sessionUsuario);
+        session()->forget($this->sessionPortKal);
         return redirect('/usuario');
     }
 
@@ -63,7 +63,8 @@ class UsuarioController extends Controller
             if ($resul == 1) {
                 $query = modelado::where("email", "=", $email)
                 ->first();
-                $sessionUsuario = session(['idUsuario' => $query["idRol"]]);
+                $sessionPortKal=["sessionPortKal"=>["idUsuario"=>$query["id"],"idRol"=>$query["idRol"]]];
+                $sessionUsuario = session($sessionPortKal);
                 $result = ["succes" => 'ok', "msg" => $this->loginExitoso];
             } else {
                 $result = ["succes" => 'error', "msg" => $this->loginError];
@@ -76,7 +77,7 @@ class UsuarioController extends Controller
 
     public function home()
     {
-        if(session()->has($this->sessionUsuario)){
+        if(session()->has($this->sessionPortKal)){
             return redirect('/usuario');
         }else{
             return view('usuario/login'); 
@@ -90,11 +91,18 @@ class UsuarioController extends Controller
     public function create(Request $request)
     {
         try {
-            $nombre = $request->input('Nombre');
+            $date = Carbon::now();
+            $fecha=$date->day.$date->month.$date->year;
             $file = $request->file('archivo');
+            $idRol = $request->input('idRol');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $telefono = $request->input('telefono');
             $email = $request->input('email');
             $password = $request->input('password');
-            $ID_Rol = $request->input('ID_Rol');
+            $direccion = $request->input('direccion');
+
             $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
             $raiz = 'img';
             $carpeta = "usuario";
@@ -114,16 +122,16 @@ class UsuarioController extends Controller
                     $query = new modelado();
                     $query->idSucursal = 1;
                     $query->idPortal = 1;
-                    $query->idRol = $ID_Rol;
-                    $query->codigoBarra = "OPE" . $generadorClave;
-                    $query->nombre = $nombre;
-                    $query->apellidoPaterno = $nombre;
-                    $query->apellidoMaterno = $nombre;
-                    $query->email = $email;
-                    $query->telefono = "";
-                    $query->domicilio = "";
-                    $query->password = $password;
-                    $query->archivo = $archivo;
+                    $query->idRol = (int) $idRol;
+                    $query->codigoBarra = (string) "OPE" .$fecha. $generadorClave;
+                    $query->nombre = (string) $nombre;
+                    $query->apellidoPaterno = (string) $apellidoPaterno;
+                    $query->apellidoMaterno = (string) $apellidoMaterno;
+                    $query->email = (string) $email;
+                    $query->telefono = (string) $telefono;
+                    $query->direccion = (string) $direccion;
+                    $query->password = (string) $password;
+                    $query->archivo = (string) $archivo;
                     $query->puntos = 0.0;
                     $query->status = '1';
                     $query->created_at = $query->freshTimestamp();
@@ -153,9 +161,17 @@ class UsuarioController extends Controller
     public function update(Request $request)
     {
         try {
-            $nombre = $request->input('Nombre');
             $id = $request->input('ID');
-            $consulta = modelado::where("nombre", "=", $nombre)
+            $file = $request->file('archivo');
+            $idRol = $request->input('idRol');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $telefono = $request->input('telefono');
+            $email = $request->input('email');
+            $password = $request->input('password');
+            $direccion = $request->input('direccion');
+            $consulta = modelado::where("email", "=", $email)
                 ->where("id", "!=", $id)
                 ->selectRaw('count(*) as contador')
                 ->first();
@@ -164,7 +180,15 @@ class UsuarioController extends Controller
                 $query = modelado::where("id", "=", $id)
                     ->first();
                 $query->nombre = $nombre;
-                $query->created_at = $query->freshTimestamp();
+                $query->idRol = (int) $idRol;
+                $query->nombre = (string) $nombre;
+                $query->apellidoPaterno = (string) $apellidoPaterno;
+                $query->apellidoMaterno = (string) $apellidoMaterno;
+                $query->email = (string) $email;
+                $query->telefono = (string) $telefono;
+                $query->direccion = (string) $direccion;
+                $query->password = (string) $password;
+                $query->updated_at = $query->freshTimestamp();
                 $query->save();
                 $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
             } else {

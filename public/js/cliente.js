@@ -1,4 +1,4 @@
-var idTablaLista = "Usuario";
+var idTablaLista = "Cliente";
 var contadorSplice = 2;
 var adiocionalesDatatable = [
     { "data": "codigoBarra" },

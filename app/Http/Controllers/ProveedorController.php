@@ -1,137 +1,189 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Usuarios; 
+
+use App\ProveedoresModel as modelado;
+use App\CatalogoModel as modeladoCatalogo;
+use App\RolesModel as modeladoRol;
+use App\MarcasModel as modeladoMarca;
+use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Crypt;
+use Carbon\Carbon;
 
 class ProveedorController extends Controller
 {
-    /**
-     * Display a listing of thssse resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
+
     public function index()
     {
-      return view('proveedor/proveedor');
-    }
-    
-    public function login(Request $request)
-    {
-        try {
-            $result = array();   
-            $email = $request->input('email');
-            $password = $request->input('password');
-            $consulta = Usuarios::where("email","=",$email)
-                                ->where("password","=",$password)
-                                ->where("status","=",1)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $resul=$consulta["contador"];
-            if($resul==1){
-              $result = ["succes"=>'ok',"msg"=>$this->loginExitoso];
-            }else{
-              $result = ["succes"=>'error',"msg"=>$this->loginError];
+        if (session()->has($this->sessionPortKal)) {
+            $sessionUsuario = session($this->sessionPortKal);
+            // session()->forget($this->sessionUsuario);
+            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Proveedor")
+                ->first();
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
+                ->where("idAccion", "=", 1)
+                ->where("idCatalogo", "=", $queryCatalogo["id"])
+                ->first();
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
+                ->Where("idCatalogo", "=", $queryCatalogo["id"])
+                ->Where("idAccion", "!=", 1)
+                ->get();
+            if ($queryPermiso["status"] == "1") {
+                $datos = modeladoCatalogo::all();
+                $Marcas = modeladoMarca::all();
+                return view('proveedor/proveedor')->with('datos', $datos)->with('marcas', $Marcas)->with('permisos', $queryPermisos);
+            } else {
+                return redirect('usuario/closeLogin');
             }
-        } catch (\Exception $e) {
-            $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-        return json_encode($result) ;
+        } else {
+            return view('usuario/login');
+            //return view('usuario/login'); 
+        }
     }
 
-    public function home()
-    {
-        return view('usuario/login');
-    }
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function create(Request $request)
-    {    
+    {
         try {
-            $result = array();   
-            $correo = $request->input('Correo');
-            $nombre = $request->input('Nombre');
-            $consulta = Usuarios::where("email","=",$correo)
-                                ->selectRaw('count(*) as contador')
-                                ->first();
-            $resul=$consulta["contador"];
-            if($resul==0){
-                $usuario = new Usuarios();
-                $usuario->id_status=1;
-                $usuario->nombre=$nombre;
-                $usuario->email=$correo;
-                $usuario->password='12345678';
-                $usuario->status='1';
-                $usuario->created_at='2019-09-10 00:00:00';
-                
-                $usuario->save();
-                $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
-            }else{
-                $result = ["succes"=>'error',"msg"=>$this->registroError];
+            $date = Carbon::now();
+            $fecha = $date->day . $date->month . $date->year;
+            $sessionUsuario = session($this->sessionPortKal);
+            $file = $request->file('archivo');
+            $idMarca = $request->input('idMarca');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $email = $request->input('email');
+            $razonSocial = $request->input('razonSocial');
+            $telefono = $request->input('telefono');
+            $domicilio = $request->input('domicilio');
+            $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
+            $raiz = 'img';
+            $carpeta = "proveedor";
+            $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
+            file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
+            if (file_exists($rutaArhcivo) == true && $archivo != "logo.png") {
+                $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
+            } else {
+                $result = array();
+                $generadorClave = $this->generadorClave;
+                $consulta = modelado::where("email", "=", $email)
+                    ->orWhere("codigoBarra", "=", $generadorClave)
+                    ->selectRaw('count(*) as contador')
+                    ->first();
+                $resul = $consulta["contador"];
+                if ($resul == 0) {
+                    $query = new modelado();
+                    $query->idUsuario = (int) $sessionUsuario["idUsuario"];
+                    $query->idMarca = (int) $idMarca;
+                    $query->codigoBarra = (string) "PRO" . $fecha . $generadorClave;
+                    $query->nombre = (string) $nombre;
+                    $query->apellidoPaterno = (string) $apellidoPaterno;
+                    $query->apellidoMaterno = (string) $apellidoMaterno;
+                    $query->email = (string) $email;
+                    $query->razonSocial = (string) $razonSocial;
+                    $query->telefono = (string) $telefono;
+                    $query->domicilio = (string) $domicilio;
+                    $query->password = (string) $generadorClave;
+                    $query->archivo = (string) $archivo;
+                    $query->puntos = 0.0;
+                    $query->status = '1';
+                    $query->created_at = $query->freshTimestamp();
+                    $query->save();
+                    $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+                    strcmp($archivo, "logo.png") ? $file->move($raiz . "/" . $carpeta, $archivo) : "";
+                } else {
+                    $result = ["succes" => 'error', "msg" => $this->registroError];
+                }
             }
-
         } catch (\Exception $e) {
-        $result = ["succes"=>'error',"msg"=>$e->getMessage()];
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
         }
-        return json_encode($result);  
+        return json_encode($result);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function list(Request $request)
     {
-        return Usuarios::all();
+        try {
+            $result = modelado::all();
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id=5)
+    public function update(Request $request)
     {
         try {
-            $usuario=Usuarios::where('id','=',$id)->first();
-            if($usuario==true){
-               $usuario->nombre='pedro';
-               $usuario->password='12345678';
-               $usuario->save();
+            $idMarca = $request->input('idMarca');
+            $nombre = $request->input('nombre');
+            $apellidoPaterno = $request->input('apellidoPaterno');
+            $apellidoMaterno = $request->input('apellidoMaterno');
+            $email = $request->input('email');
+            $razonSocial = $request->input('razonSocial');
+            $telefono = $request->input('telefono');
+            $domicilio = $request->input('domicilio');
+            $id = $request->input('ID');
+            $consulta = modelado::where("email", "=", $email)
+                ->where("id", "!=", $id)
+                ->selectRaw('count(*) as contador')
+                ->first();
+            $result = $consulta["contador"];
+            if ($result == 0) {
+                $query = modelado::where("id", "=", $id)
+                    ->first();
+                $query->idMarca = (int) $idMarca;
+                $query->nombre = (string) $nombre;
+                $query->apellidoPaterno = (string) $apellidoPaterno;
+                $query->apellidoMaterno = (string) $apellidoMaterno;
+                $query->email = (string) $email;
+                $query->razonSocial = (string) $razonSocial;
+                $query->telefono = (string) $telefono;
+                $query->domicilio = (string) $domicilio;
+                $query->updated_at = $query->freshTimestamp();
+                $query->save();
+                $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+            } else {
+                $result = ["succes" => 'error', "msg" => $this->registroError];
             }
-            $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
         } catch (\Exception $e) {
-                $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-            return json_encode($result);  
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function delete($id=5)
+    public function delete(Request $request)
+    {
+        $ID = $request->input('eliminaID');
+        $Status = $request->input('eliminaStatus');
+        try {
+            $query = modelado::where('id', '=', $ID)->first();
+            if ($query == true) {
+                $query->status = $Status;
+                $query->updated_at = $query->freshTimestamp();
+                $query->save();
+            }
+            $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+        } catch (\Exception $e) {
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
+    }
+
+    public function detalle(Request $request, $ID)
     {
         try {
-            $usuario=Usuarios::where('id','=',$id)->first();
-            if($usuario==true){
-                $usuario->status='0';
-                $usuario->save();
-            }
-            $result = ["succes"=>'ok',"msg"=>$this->registroExitoso];
+            $query = modelado::where('id', '=', $ID)->first();
+            $result = $query;
         } catch (\Exception $e) {
-                 $result = ["succes"=>'error',"msg"=>$e->getMessage()];
-            }
-            return json_encode($result);   
+            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+        }
+        return json_encode($result);
     }
 }

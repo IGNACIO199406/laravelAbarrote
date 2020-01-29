@@ -15,14 +15,15 @@ class ProductoController extends Controller
 {
     public function index()
     {
-        $sessionUsuario = session($this->sessionUsuario);
+        if(session()->has($this->sessionPortKal)){
+        $sessionUsuario = session($this->sessionPortKal);
         $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Producto")
                 ->first();
-            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->where("idAccion", "=", 1)
                 ->where("idCatalogo", "=", $queryCatalogo["id"])
                 ->first();
-            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario)
+            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
                 ->Where("idCatalogo", "=", $queryCatalogo["id"])
                 ->Where("idAccion", "!=", 1)
                 ->get();
@@ -34,7 +35,11 @@ class ProductoController extends Controller
             ->with('marcas', $datosMarca)
             ->with('unidades', $datosUnidad)
             ->with('departamentos', $modeladoDepartamento)
-            ->with('permisos', $queryPermisos);;
+            ->with('permisos', $queryPermisos);
+        }else{
+            return view('usuario/login'); 
+            //return view('usuario/login'); 
+        }
     }
 
     public function create(Request $request)

@@ -1,8 +1,8 @@
  /*
-                                                                                                                                                                                                                                                                                                                                                                                                  ------------------------------------------------
-                                                                                                                                                                                                                                                                                                                                                                                                  Insert Update Delete
-                                                                                                                                                                                                                                                                                                                                                                                                  ------------------------------------------------
-                                                                                                                                                                                                                                                                                                                                                                                                  */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ------------------------------------------------
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                   Insert Update Delete
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                   ------------------------------------------------
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                   */
 
  //declaracion de variables
  var letras, numeros, correo, Contador, array_inputs, i, x, Search_required, Input_validar, Input_validar_texto, Input_validar_numeros, Input_validar_correo, ID_Form;
@@ -272,7 +272,11 @@
      } else if (tabla.toLowerCase() == "usuario") {
          ID_Form["email"].value = registroArray.email;
          ID_Form["password"].value = registroArray.password;
-         $('#ID_Rol option[value=' + registroArray.ID_Rol + ']').prop("selected", true);
+         ID_Form["apellidoPaterno"].value = registroArray.apellidoPaterno;
+         ID_Form["apellidoMaterno"].value = registroArray.apellidoMaterno;
+         ID_Form["direccion"].value = registroArray.direccion;
+         ID_Form["telefono"].value = registroArray.telefono;
+         $('#idRol option[value=' + registroArray.idRol + ']').prop("selected", true);
          var serial_attr = $("#parent option:selected").attr("serial");
      } else if (tabla.toLowerCase() == "producto") {
          ID_Form["precioCompra"].value = registroArray.precioCompra;
@@ -284,6 +288,21 @@
          $('#idDepartamento option[value=' + registroArray.idDepartamento + ']').prop("selected", true);
          $('#idUnidad option[value=' + registroArray.idUnidad + ']').prop("selected", true);
 
+     } else if (tabla.toLowerCase() == "proveedor") {
+         ID_Form["email"].value = registroArray.email;
+         ID_Form["apellidoPaterno"].value = registroArray.apellidoPaterno;
+         ID_Form["apellidoMaterno"].value = registroArray.apellidoMaterno;
+         ID_Form["direccion"].value = registroArray.direccion;
+         ID_Form["razonSocial"].value = registroArray.razonSocial;
+         ID_Form["telefono"].value = registroArray.telefono;
+         $('#idMarca option[value=' + registroArray.idMarca + ']').prop("selected", true);
+         var serial_attr = $("#parent option:selected").attr("serial");
+     } else if (tabla.toLowerCase() == "cliente") {
+         ID_Form["email"].value = registroArray.email;
+         ID_Form["apellidoPaterno"].value = registroArray.apellidoPaterno;
+         ID_Form["apellidoMaterno"].value = registroArray.apellidoMaterno;
+         ID_Form["domicilio"].value = registroArray.domicilio;
+         ID_Form["telefono"].value = registroArray.telefono;
      }
      $("#Modal-InUp_" + tabla).modal("show");
  }

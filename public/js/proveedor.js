@@ -1,34 +1,25 @@
-var dataTableId = $('#example').DataTable({
-    "language": {
-        "url": "../json/lenguajeDatatable.json"
-    },
-    "ajax": {
-        "url": "../usuario/lista",
-        "contentType": "application/json",
-        "dataSrc": ""
-    },
-    "columns": [{
-            "data": "id"
-        },
-        {
-            "data": "email"
-        },
-        {
-            "data": "password"
-        },
-        {
-            "data": "status"
-        },
-        {
-            "data": "created_at"
-        },
-        {
-            "data": "updated_at"
+var idTablaLista = "Proveedor";
+var contadorSplice = 2;
+var adiocionalesDatatable = [
+    { "data": "codigoBarra" },
+    {
+        "data": null,
+        "render": function(data, type, row) {
+            // Combinar campos
+            return data.nombre + ' ' + data.apellidoPaterno + ' ' + data.apellidoMaterno;
         }
-    ]
-});
+    },
+    { "data": "email" },
+    { "data": "puntos" },
+    { "data": "archivo" }
+];
 
+// agregar elementos a datatable de los que no son generaes
+for (index = 0; index < adiocionalesDatatable.length; index++) {
+    columnasDatatable.splice(contadorSplice, 0, adiocionalesDatatable[index]);
+    contadorSplice = contadorSplice + 1;
+}
 
-$('#botonRegistro').click(function() {
-    $(this).attr("data-target", "#Modal-InUp_Proveedor");
-});
+columnasDatatable.push(accionesDatatable);
+//eliminar tres campos de la tabla despues de la posicion 1 del array
+columnasDatatable.splice(1, 1);
