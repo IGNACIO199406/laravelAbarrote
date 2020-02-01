@@ -12,10 +12,12 @@
       <table id="listaProducto" class="display" style="width:100%">
         <thead>
           <tr>
+          <th>Quitar</th>
             <th>Clave</th>
             <th>Nombre</th>
             <th>Precio C</th>
             <th>Precio V</th>
+            <th>Stock</th>
             <th>Archivo</th>
             <th>Status.</th>
             <th>Se-Registro</th>

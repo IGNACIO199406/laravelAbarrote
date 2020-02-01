@@ -25,7 +25,8 @@ $arrayList = [
     "dia" => "dia",
     "venta" => "venta",
     "categoria" => "categoria",     
-    "unidad" => "unidad"
+    "unidad" => "unidad",
+    "almacen" => "almacen"
 ];
 
 foreach ($arrayList as $rutaSelect) {

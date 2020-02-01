@@ -122,7 +122,16 @@ class Catalogo extends Seeder
             ],
             [
                 "id" => 13,
-                "nombre" => "estatus",
+                "nombre" => "Estatus",
+                "url" => "",
+                "parent" => "1",
+                "status" => "1",
+                'created_at' => date('Y-m-d H:m:s'),
+                'updated_at' => date('Y-m-d H:m:s')
+            ],
+            [
+                "id" => 14,
+                "nombre" => "Almacen",
                 "url" => "",
                 "parent" => "1",
                 "status" => "1",

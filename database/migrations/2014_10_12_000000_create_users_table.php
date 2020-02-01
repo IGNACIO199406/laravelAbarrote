@@ -149,6 +149,11 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('almacen', function (Blueprint $table) {
+            $table->integer('idProducto');
+            $table->integer('stock');
+        });
+
         Schema::create('agenda', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('idCatalogo');
@@ -231,5 +236,6 @@ class CreateUsersTable extends Migration
         Schema::drop('venta');
         Schema::drop('ventaDetalle');
         Schema::drop('unidad');
+        Schema::drop('almacen');
     }
 }
