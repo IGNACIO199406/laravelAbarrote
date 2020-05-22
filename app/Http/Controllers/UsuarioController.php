@@ -7,28 +7,25 @@ use App\CatalogoModel as modeladoCatalogo;
 use App\RolesModel as modeladoRol;
 use App\PermisosModel as modeladoPermiso;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Crypt;
 use Carbon\Carbon;
 class UsuarioController extends Controller
 {
     
     public function index()
     {
-        if(session()->has($this->sessionPortKal)){
-            $sessionUsuario = session($this->sessionPortKal);
-            //session()->forget($this->sessionPortKal);
-            $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Usuario")
+        if(session()->has($this->sessionSistema)){
+            $sessionUsuario = session($this->sessionSistema);
+            $queryCatalogo = modeladoCatalogo::where($this->nombreCampoTabla, "=", "Usuario")
                 ->first();
-            $queryPermiso = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
-                ->where("idAccion", "=", 1)
-                ->where("idCatalogo", "=", $queryCatalogo["id"])
+            $queryPermiso = modeladoPermiso::where($this->idRolCampoTabla, "=", (int) $sessionUsuario[$this->idRolCampoTabla])
+                ->where($this->idAccionCampoTabla, "=", 1)
+                ->where($this->idCatalogoCampoTabla, "=", $queryCatalogo[$this->idCampoTabla])
                 ->first();
-            $queryPermisos = modeladoPermiso::where("idRol", "=", (int) $sessionUsuario["idRol"])
-                ->Where("idCatalogo", "=", $queryCatalogo["id"])
-                ->Where("idAccion", "!=", 1)
+            $queryPermisos = modeladoPermiso::where($this->idRolCampoTabla, "=", (int) $sessionUsuario[$this->idRolCampoTabla])
+                ->Where($this->idCatalogoCampoTabla, "=", $queryCatalogo[$this->idCampoTabla])
+                ->Where($this->idAccionCampoTabla, "!=", 1)
                 ->get();
-            if($queryPermiso["status"]=="1"){
+            if($queryPermiso[$this->statusCampoTabla]=="1"){
                 $datos = modeladoCatalogo::all();
                 $Roles = modeladoRol::all();
                 return view('usuario/usuario')->with('datos', $datos)->with('roles', $Roles)->with('permisos', $queryPermisos);
@@ -37,47 +34,46 @@ class UsuarioController extends Controller
             }
             
         }else{
-            return view('usuario/login'); 
-            //return view('usuario/login'); 
+            return view('usuario/login');
         }
     }
 
     public function closeLogin()
     {
-        session()->forget($this->sessionPortKal);
-        return redirect('/usuario');
+        session()->forget($this->sessionSistema);
+        return redirect('/');
     }
 
     public function login(Request $request)
     {
         try {
             $result = array();
-            $email = $request->input('email');
-            $password = $request->input('password');
-            $consulta = modelado::where("email", "=", $email)
-                ->where("password", "=", $password)
-                ->where("status", "=", 1)
-                ->selectRaw('count(*) as contador')
+            $email = $request->input($this->emailCampoTabla);
+            $password = $request->input($this->passwordCampoTabla);
+            $consulta = modelado::where($this->emailCampoTabla, "=", $email)
+                ->where($this->passwordCampoTabla, "=", $password)
+                ->where($this->statusCampoTabla, "=", 1)
+                ->selectRaw('count(*) as '.$this->contadorCampoTabla)
                 ->first();
-            $resul = $consulta["contador"];
+            $resul = $consulta[$this->contadorCampoTabla];
             if ($resul == 1) {
-                $query = modelado::where("email", "=", $email)
+                $query = modelado::where($this->emailCampoTabla, "=", $email)
                 ->first();
-                $sessionPortKal=["sessionPortKal"=>["idUsuario"=>$query["id"],"idRol"=>$query["idRol"]]];
-                $sessionUsuario = session($sessionPortKal);
-                $result = ["succes" => 'ok', "msg" => $this->loginExitoso];
+                $sessionSistema=[$this->sessionSistema =>[$this->idUsuarioCampoTabla=>$query[$this->idCampoTabla],$this->idRolCampoTabla=>$query[$this->idRolCampoTabla]]];
+                session($sessionSistema);
+                $result = [$this->succes => $this->ok, $this->msg => $this->loginExitoso];
             } else {
-                $result = ["succes" => 'error', "msg" => $this->loginError];
+                $result = [$this->succes => $this->error, $this->msg => $this->loginError];
             }
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $e->getMessage()];
+            $result = [$this->succes => $this->error, $this->msg => $e->getMessage()];
         }
         return json_encode($result);
     }
 
     public function home()
     {
-        if(session()->has($this->sessionPortKal)){
+        if(session()->has($this->sessionSistema)){
             return redirect('/usuario');
         }else{
             return view('usuario/login'); 
@@ -99,21 +95,21 @@ class UsuarioController extends Controller
             $apellidoPaterno = $request->input('apellidoPaterno');
             $apellidoMaterno = $request->input('apellidoMaterno');
             $telefono = $request->input('telefono');
-            $email = $request->input('email');
+            $email = $request->input($this->emailCampoTabla);
             $password = $request->input('password');
             $direccion = $request->input('direccion');
 
-            $archivo = empty($file) ? "logo.png" : $file->getClientOriginalName();
+            $archivo = empty($file) ? $this->imagenGeneral : $file->getClientOriginalName();
             $raiz = 'img';
             $carpeta = "usuario";
             $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
             file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
-            if (file_exists($rutaArhcivo) == true && $archivo != "logo.png") {
-                $result = ["succes" => 'error', "msg" => "El fichero $archivo existe "];
+            if (file_exists($rutaArhcivo) == true && $archivo != $this->imagenGeneral) {
+                $result = [$this->succes => $this->error, $this->msg => $this->ficheroError];
             } else {
                 $result = array();
                 $generadorClave = $this->generadorClave;
-                $consulta = modelado::where("email", "=", $email)
+                $consulta = modelado::where($this->emailCampoTabla, "=", $email)
                     ->where("codigoBarra", "=", $generadorClave)
                     ->selectRaw('count(*) as contador')
                     ->first();
@@ -136,14 +132,14 @@ class UsuarioController extends Controller
                     $query->status = '1';
                     $query->created_at = $query->freshTimestamp();
                     $query->save();
-                    $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+                    $result = [$this->succes => $this->ok, $this->msg => $this->registroExitoso];
                     strcmp($archivo, "logo.png") ? $file->move($raiz . "/" . $carpeta, $archivo) : "";
                 } else {
-                    $result = ["succes" => 'error', "msg" => $this->registroError];
+                    $result = [$this->succes => $this->error, $this->msg => $this->registroError];
                 }
             }
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+            $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];
         }
         return json_encode($result);
     }
@@ -153,7 +149,7 @@ class UsuarioController extends Controller
         try {
             $result = modelado::all();
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+            $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];
         }
         return json_encode($result);
     }
@@ -190,12 +186,12 @@ class UsuarioController extends Controller
                 $query->password = (string) $password;
                 $query->updated_at = $query->freshTimestamp();
                 $query->save();
-                $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+                $result = [$this->succes => $this->ok, $this->msg => $this->actualizoExitoso];
             } else {
-                $result = ["succes" => 'error', "msg" => $this->registroError];
+                $result = [$this->succes => $this->error, $this->msg => $this->actualizoError];
             }
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+            $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];
         }
         return json_encode($result);
     }
@@ -211,9 +207,9 @@ class UsuarioController extends Controller
                 $query->updated_at = $query->freshTimestamp();
                 $query->save();
             }
-            $result = ["succes" => 'ok', "msg" => $this->registroExitoso];
+            $result = [$this->succes => $this->ok, $this->msg => $this->eliminiExitoso];
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+            $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];
         }
         return json_encode($result);
     }
@@ -224,7 +220,7 @@ class UsuarioController extends Controller
             $query = modelado::where('id', '=', $ID)->first();
             $result = $query;
         } catch (\Exception $e) {
-            $result = ["succes" => 'error', "msg" => $this->sistemaError];
+            $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];
         }
         return json_encode($result);
     }

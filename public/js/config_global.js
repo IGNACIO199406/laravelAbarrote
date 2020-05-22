@@ -152,8 +152,8 @@
                  processData: false,
                  success: function(Datos) {
                      registros = JSON.parse(Datos);
-                     switch (registros.succes) {
-                         case 'ok':
+                     switch (registros.Succes) {
+                         case 'Ok':
                              var buscarCadena = Select_Action_Form.search("usuario/login");
                              if (buscarCadena >= 0) {
                                  window.location.href = "/usuario";
@@ -165,7 +165,7 @@
                              }
                              //console.log(registros);
                              break;
-                         case 'error':
+                         case 'Error':
                              break;
                      }
                  }

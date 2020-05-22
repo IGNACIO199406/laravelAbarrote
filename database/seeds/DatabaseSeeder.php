@@ -6,6 +6,8 @@ class DatabaseSeeder extends Seeder
 {
     /**
      * Seed the application's database.
+     * composer install
+     * php artisan key:generate
      * php artisan migrate             --migracion
      * php artisan db:seed             --insertar registros
      * php artisan migrate:reset       --todas las migraciones

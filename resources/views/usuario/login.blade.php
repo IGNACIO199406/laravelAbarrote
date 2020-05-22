@@ -77,30 +77,8 @@
 <!-- iCheck -->
 <script src="../../plugins/iCheck/icheck.min.js"></script>
 <script src="../../js/toastr.js"></script>
+<script src="../../js/usuario/login"></script>
 <script src="../../js/config_global.js"></script>
 
-
-<script>
-  // $(function () {
-  //   $('input').iCheck({
-  //     checkboxClass: 'icheckbox_square-blue',
-  //     radioClass: 'iradio_square-blue',
-  //     increaseArea: '20%' /* optional */
-  //   });
-  // });
-
-//   $('.checkss' ).on( 'click', function() {
-//     if($("#check").is(':checked')){
-//     alert("Checked");
-// }
-// });
-
-$("input[type=checkbox]").is(':checked') ? $(".checkss").attr('value','true') : $(".checkss").attr('value',false)
-$("input[type=checkbox]").click(function(){ 
- 	result = $(this).is(':checked') ? $(this).attr('value','true') : $(this).attr('value',false);
-});
-
-
-</script>
 </body>
 </html>

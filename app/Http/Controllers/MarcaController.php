@@ -11,8 +11,8 @@ class MarcaController extends Controller
 {
     public function index()
     { 
-        if(session()->has($this->sessionPortKal)){
-            $sessionUsuario = session($this->sessionPortKal);
+        if(session()->has($this->sessionSistema)){
+            $sessionUsuario = session($this->sessionSistema);
            // session()->forget($this->sessionUsuario);
             $queryCatalogo = modeladoCatalogo::where("nombre", "=", "Marca")
                 ->first();

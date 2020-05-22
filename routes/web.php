@@ -3,12 +3,12 @@
 |--------------------------------------------------------------------------
 | Web rutas de los controladores generales del array asociativo
 |--------------------------------------------------------------------------
-//Route::middleware('auth:api')->get("/".$Usuario."/app/create", "Usuario@appCreate")->name($Usuario."App"."Crear");
-php artisan make:controller Marca
 */
+$usuario = "usuario";
+$permiso ="permiso";
 
 $arrayList = [
-    "usuario" => "usuario",
+    $usuario => "usuario",
     "cliente" => "cliente",
     "proveedor" => "proveedor",
     "sucursal" => "sucursal",
@@ -18,7 +18,7 @@ $arrayList = [
     "marca" => "marca",
     "rol" => "rol",
     "accion" => "accion",
-    "permiso" => "permiso",
+    $permiso => "permiso",
     "producto" => "producto",
     "departamento" => "departamento",
     "agenda" => "agenda",
@@ -43,12 +43,12 @@ foreach ($arrayList as $rutaSelect) {
 | Web rutas de los controladores unicas
 |--------------------------------------------------------------------------
 */
-$rutaSelect = "permiso";
+$rutaSelect = $permiso;
 Route::get("/" . $rutaSelect . "/faltante", ucfirst($rutaSelect) . "Controller@faltantePermiso")->name($rutaSelect . "Faltante");
 Route::get("/" . $rutaSelect . "/ajuste/{id}", ucfirst($rutaSelect) . "Controller@ajustePermiso")->name($rutaSelect . "Ajuste");
 Route::get("/" . $rutaSelect . "/actualiza/{id}/{status}", ucfirst($rutaSelect) . "Controller@activePermiso")->name($rutaSelect . "activePermiso");
 Route::get("/" . $rutaSelect . "/actualiza/catalogo/{id}/{idRol}/{status}", ucfirst($rutaSelect) . "Controller@activePermisoCatalogo")->name($rutaSelect . "activePermisoCatalogo");
-$rutaSelect = "usuario";
-Route::get("/", ucfirst($rutaSelect) . "Controller@home")->name($rutaSelect . "Home");
+$rutaSelect = $usuario;
+Route::get("/", $rutaSelect . "Controller@home")->name($rutaSelect . "Home");
 Route::post("/" . $rutaSelect . "/login", ucfirst($rutaSelect) . "Controller@login")->name($rutaSelect . "Login");
 Route::get("/" . $rutaSelect . "/closeLogin", ucfirst($rutaSelect) . "Controller@closeLogin")->name($rutaSelect . "closeLogin");
