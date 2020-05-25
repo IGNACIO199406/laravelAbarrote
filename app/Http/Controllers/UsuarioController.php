@@ -53,7 +53,7 @@ class UsuarioController extends Controller
             $consulta = modelado::where($this->emailCampoTabla, "=", $email)
                 ->where($this->passwordCampoTabla, "=", $password)
                 ->where($this->statusCampoTabla, "=", 1)
-                ->selectRaw('count(*) as '.$this->contadorCampoTabla)
+                ->selectRaw($this->contadorGeneral)
                 ->first();
             $resul = $consulta[$this->contadorCampoTabla];
             if ($resul == 1) {
@@ -89,31 +89,30 @@ class UsuarioController extends Controller
         try {
             $date = Carbon::now();
             $fecha=$date->day.$date->month.$date->year;
-            $file = $request->file('archivo');
-            $idRol = $request->input('idRol');
-            $nombre = $request->input('nombre');
-            $apellidoPaterno = $request->input('apellidoPaterno');
-            $apellidoMaterno = $request->input('apellidoMaterno');
-            $telefono = $request->input('telefono');
+            $file = $request->file($this->archivoCampoTabla);
+            $idRol = $request->input($this->idRolCampoTabla);
+            $nombre = $request->input($this->nombreCampoTabla);
+            $apellidoPaterno = $request->input($this->apellidoPaternoCampoTabla);
+            $apellidoMaterno = $request->input($this->apellidoMaternoCampoTabla);
+            $telefono = $request->input($this->telefonoCampoTabla);
             $email = $request->input($this->emailCampoTabla);
-            $password = $request->input('password');
-            $direccion = $request->input('direccion');
+            $password = $request->input($this->passwordCampoTabla);
+            $direccion = $request->input($this->direccionCampoTabla);
 
             $archivo = empty($file) ? $this->imagenGeneral : $file->getClientOriginalName();
-            $raiz = 'img';
             $carpeta = "usuario";
-            $rutaArhcivo = $raiz . "/" . $carpeta . "/" . $archivo;
-            file_exists($raiz . "/" . $carpeta) ? "" : mkdir($raiz . "/" . $carpeta, 0755, true);
-            if (file_exists($rutaArhcivo) == true && $archivo != $this->imagenGeneral) {
+            $rutaArhcivo = $this->raizImgGeneral . "/" . $carpeta . "/" . $archivo;
+            file_exists($this->raizImgGeneral . "/" . $carpeta) ? "" : mkdir($this->raizImgGeneral . "/" . $carpeta, 0755, true);
+            if (file_exists($rutaArhcivo) == $this->booleanTrueGeneral && $archivo != $this->imagenGeneral) {
                 $result = [$this->succes => $this->error, $this->msg => $this->ficheroError];
             } else {
                 $result = array();
                 $generadorClave = $this->generadorClave;
                 $consulta = modelado::where($this->emailCampoTabla, "=", $email)
-                    ->where("codigoBarra", "=", $generadorClave)
-                    ->selectRaw('count(*) as contador')
+                    ->where($this->codigoBarraCampoTabla, "=", $generadorClave)
+                    ->selectRaw($this->contadorGeneral)
                     ->first();
-                $resul = $consulta["contador"];
+                $resul = $consulta[$this->contadorCampoTabla];
                 if ($resul == 0) {
                     $query = new modelado();
                     $query->idSucursal = 1;
@@ -133,7 +132,7 @@ class UsuarioController extends Controller
                     $query->created_at = $query->freshTimestamp();
                     $query->save();
                     $result = [$this->succes => $this->ok, $this->msg => $this->registroExitoso];
-                    strcmp($archivo, "logo.png") ? $file->move($raiz . "/" . $carpeta, $archivo) : "";
+                    strcmp($archivo, $this->imagenGeneral) ? $file->move($this->raizImgGeneral . "/" . $carpeta, $archivo) : "";
                 } else {
                     $result = [$this->succes => $this->error, $this->msg => $this->registroError];
                 }
@@ -157,23 +156,23 @@ class UsuarioController extends Controller
     public function update(Request $request)
     {
         try {
-            $id = $request->input('ID');
-            $file = $request->file('archivo');
-            $idRol = $request->input('idRol');
-            $nombre = $request->input('nombre');
-            $apellidoPaterno = $request->input('apellidoPaterno');
-            $apellidoMaterno = $request->input('apellidoMaterno');
-            $telefono = $request->input('telefono');
-            $email = $request->input('email');
-            $password = $request->input('password');
-            $direccion = $request->input('direccion');
-            $consulta = modelado::where("email", "=", $email)
-                ->where("id", "!=", $id)
-                ->selectRaw('count(*) as contador')
+            $id = $request->input($this->idGeneral);
+            $file = $request->file($this->archivoCampoTabla);
+            $idRol = $request->input($this->idRolCampoTabla);
+            $nombre = $request->input($this->nombreCampoTabla);
+            $apellidoPaterno = $request->input($this->apellidoPaternoCampoTabla);
+            $apellidoMaterno = $request->input($this->apellidoMaternoCampoTabla);
+            $telefono = $request->input($this->telefonoCampoTabla);
+            $email = $request->input($this->emailCampoTabla);
+            $password = $request->input($this->passwordCampoTabla);
+            $direccion = $request->input($this->direccionCampoTabla);
+            $consulta = modelado::where($this->emailCampoTabla, "=", $email)
+                ->where($this->idCampoTabla, "!=", $id)
+                ->selectRaw($this->contadorGeneral)
                 ->first();
-            $result = $consulta["contador"];
+            $result = $consulta[$this->contadorCampoTabla];
             if ($result == 0) {
-                $query = modelado::where("id", "=", $id)
+                $query = modelado::where($this->idCampoTabla, "=", $id)
                     ->first();
                 $query->nombre = $nombre;
                 $query->idRol = (int) $idRol;
@@ -198,11 +197,11 @@ class UsuarioController extends Controller
 
     public function delete(Request $request)
     {
-        $ID = $request->input('eliminaID');
-        $Status = $request->input('eliminaStatus');
+        $ID = $request->input($this->idGeneral);
+        $Status = $request->input($this->statusCampoTabla);
         try {
-            $query = modelado::where('id', '=', $ID)->first();
-            if ($query == true) {
+            $query = modelado::where($this->idCampoTabla, '=', $ID)->first();
+            if ($query == $this->booleanTrueGeneral) {
                 $query->status = $Status;
                 $query->updated_at = $query->freshTimestamp();
                 $query->save();
@@ -217,7 +216,7 @@ class UsuarioController extends Controller
     public function detalle(Request $request, $ID)
     {
         try {
-            $query = modelado::where('id', '=', $ID)->first();
+            $query = modelado::where($this->idCampoTabla, '=', $ID)->first();
             $result = $query;
         } catch (\Exception $e) {
             $result = [$this->succes => $this->error, $this->msg => $this->sistemaError];

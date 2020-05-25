@@ -30,11 +30,13 @@ class Controller extends BaseController
         return $mensajeList;
     }
 
-    public function variablesGenerales(){
-        $variablesGenerales = [
+    public function variableGeneral(){
+        $variableGeneral = [
             "imagenGeneral" => "logo.png",
+            "raizImgGeneral" => "img",
+            "contadorGeneral" => "count(*) as contador",
         ];
-        return $variablesGenerales;
+        return $variableGeneral;
     }
 
     public function msgSistema(){
@@ -66,6 +68,7 @@ class Controller extends BaseController
             "apellidoMaternoCampoTabla" => "apellidoMaterno",
             "telefonoCampoTabla" => "telefono",
             "direccionCampoTabla" => "direccion",
+            "codigoBarraCampoTabla" => "codigoBarra",
         ];
         return $campoTabla; 
     }
@@ -114,7 +117,7 @@ class Controller extends BaseController
         $msgSistema = $this->msgSistema();
         $campoTabla = $this->campoTabla();
         $tabla = $this->tabla();
-        $variablesGenerales = $this->variablesGenerales();
+        $variableGeneral = $this->variableGeneral();
 
         $this->registroExitoso = $mensajeList["registroExitoso"];
         $this->loginExitoso = $mensajeList["loginExitoso"];
@@ -172,7 +175,10 @@ class Controller extends BaseController
         $this->unidadTabla = $tabla["unidadTabla"];
         $this->almacenTabla = $tabla["almacenTabla"];
 
-        $this->imagenGeneral = $variablesGenerales["imagenGeneral"];
+        $this->imagenGeneral = $variableGeneral["imagenGeneral"];
+        $this->raizImgGeneral = $variableGeneral["raizImgGeneral"];
+        $this->contadorGeneral = $variableGeneral["contadorGeneral"];
+
         $this->generadorClave = $this->generadorClaves();
     }
 }
